@@ -7,10 +7,10 @@ public class SimpleMouth implements IMouth {
     private Vector3D cornerRight, cornerLeft, top, bot;
 
     public void updateMouthData(FloatBuffer buffer) {
-        cornerLeft = new Vector3D(getVectorInMesh(76, buffer));
-        cornerRight = new Vector3D(getVectorInMesh(306, buffer));
-        top = new Vector3D(getVectorInMesh(12, buffer));
-        bot = new Vector3D(getVectorInMesh(15, buffer));
+        cornerLeft = getVectorInMesh(76, buffer);
+        cornerRight = getVectorInMesh(306, buffer);
+        top = getVectorInMesh(12, buffer);
+        bot = getVectorInMesh(15, buffer);
     }
 
     @Override

@@ -15,6 +15,8 @@ import java.nio.FloatBuffer;
 
 public class CameraActivity extends AppCompatActivity {
 
+    Session session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,7 @@ public class CameraActivity extends AppCompatActivity {
 
     public void createSession() {
         // Create a new ARCore session.
-        Session session = null;
+        session = null;
         try {
             session = new Session(this);
         } catch (UnavailableArcoreNotInstalledException e) {
@@ -35,7 +37,6 @@ public class CameraActivity extends AppCompatActivity {
         } catch (UnavailableDeviceNotCompatibleException e) {
             e.printStackTrace();
         }
-
         // Create a session config.
         Config config = new Config(session);
 
