@@ -11,6 +11,8 @@ import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 
+import java.nio.FloatBuffer;
+
 public class CameraActivity extends AppCompatActivity {
 
     @Override
