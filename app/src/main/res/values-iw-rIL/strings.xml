@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">תנו חיוך</string>
+    <string name="no_camera_access" translatable="false">בבקשה תאשרו הרשאות מצלמה</string>
+</resources>

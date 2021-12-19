@@ -2,121 +2,127 @@ package com.example.magdadmilbat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
-import android.os.Build;
+import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.google.ar.core.AugmentedFace;
-import com.google.ar.core.CameraConfig;
-import com.google.ar.core.CameraConfigFilter;
-import com.google.ar.core.Config;
-import com.google.ar.core.Pose;
-import com.google.ar.core.Session;
-import com.google.ar.core.TrackingState;
-import com.google.ar.core.exceptions.UnavailableApkTooOldException;
-import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
-import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
-import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
+import com.example.magdadmilbat.vision.FaceMeshResultGlRenderer;
+import com.google.mediapipe.components.PermissionHelper;
+import com.google.mediapipe.formats.proto.LandmarkProto;
+import com.google.mediapipe.solutioncore.CameraInput;
+import com.google.mediapipe.solutioncore.SolutionGlSurfaceView;
+import com.google.mediapipe.solutions.facemesh.FaceMesh;
+import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
+import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
 
-import java.nio.FloatBuffer;
-
-import java.nio.ShortBuffer;
-import java.util.Collection;
 
 public class CameraActivity extends AppCompatActivity {
 
 
-    private static final int CAMERA_PERMISSION = 1;
-    private Session session;
+    private static final String TAG = "CameraAct";
+    private CameraInput cameraInput;
+    private FaceMesh faceMesh;
+    private SolutionGlSurfaceView<FaceMeshResult> glSurfaceView;
+
+    private SurfaceTexture previewFrameTexture;
+    private SurfaceView previewDisplayView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
+        previewDisplayView = new SurfaceView(this);
+        setupPreviewDisplayView();
 
-        createSession();
+        PermissionHelper.checkAndRequestCameraPermissions(this);
 
-        new Thread(new Runnable() {
-            public void run() {
-                while(true)
-                {
+        FaceMeshOptions faceMeshOptions =
+                FaceMeshOptions.builder()
+                        .setStaticImageMode(false)
+                        .setRefineLandmarks(true)
+                        .setMaxNumFaces(1)
+                        .setRunOnGpu(true).build();
+
+        faceMesh = new FaceMesh(this, faceMeshOptions);
+        faceMesh.setErrorListener(
+                (message, e) -> Log.e(TAG, "MediaPipe Face Mesh error:" + message));
+
+        cameraInput = new CameraInput(this);
+        cameraInput.setNewFrameListener(val -> {
+            faceMesh.send(val);
+            Log.i(TAG, "updated frame");
+        });
+
+
+        glSurfaceView =
+                new SolutionGlSurfaceView<>(
+                        this, faceMesh.getGlContext(), faceMesh.getGlMajorVersion());
+        glSurfaceView.setSolutionResultRenderer(new FaceMeshResultGlRenderer());
+        glSurfaceView.setRenderInputImage(true);
+
+        faceMesh.setResultListener(
+                faceMeshResult -> {
                     try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        LandmarkProto.NormalizedLandmark noseLandmark =
+                                faceMeshResult.multiFaceLandmarks().get(0).getLandmarkList().get(1);
+                        Log.i(
+                                TAG,
+                                String.format(
+                                        "MediaPipe Face Mesh nose normalized coordinates (value range: [0, 1]): x=%f, y=%f",
+                                        noseLandmark.getX(), noseLandmark.getY()));
+                        // Request GL rendering.
+                        glSurfaceView.setRenderData(faceMeshResult);
+                        glSurfaceView.requestRender();
+                    } catch (IndexOutOfBoundsException e) {
+                        Log.i(TAG, "NO FACEEEE");
                     }
-                    ArCoreCamera();
-                }
-            }
-        }).start();
+                });
 
-//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-//        startActivity(intent);
+//        glSurfaceView.post(
+//                () -> {
+//                        cameraInput.start(
+//                                this,
+//                                faceMesh.getGlContext(),
+//                                CameraInput.CameraFacing.FRONT,
+//                                glSurfaceView.getWidth(),
+//                                glSurfaceView.getHeight());
+//                        Log.i(TAG, "Started Cam");
+//                });
+        glSurfaceView.setVisibility(View.VISIBLE);
 
-//        FloatBuffer faceMesh =  ArgumentedFace.getMeshVertics();
+        cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
+                1024, 768);
 
     }
 
-
-    public void createSession() {
-        // Create a new ARCore session.
-        session = null;
-        try {
-            session = new Session(this);
-        } catch (UnavailableArcoreNotInstalledException e) {
-            e.printStackTrace();
-        } catch (UnavailableApkTooOldException e) {
-            e.printStackTrace();
-        } catch (UnavailableSdkTooOldException e) {
-            e.printStackTrace();
-        } catch (UnavailableDeviceNotCompatibleException e) {
-            e.printStackTrace();
-        }
-
-        CameraConfigFilter filter =
-                new CameraConfigFilter(session).setFacingDirection(CameraConfig.FacingDirection.FRONT);
-        CameraConfig cameraConfig = session.getSupportedCameraConfigs(filter).get(0);
-        session.setCameraConfig(cameraConfig);
-
-        Config config = new Config(session);
-        config.setAugmentedFaceMode(Config.AugmentedFaceMode.MESH3D);
-        session.configure(config);
+    private void setupPreviewDisplayView() {
+        previewDisplayView.setVisibility(View.GONE);
+        ViewGroup viewGroup = findViewById(R.id.preview_display_layout);
+        viewGroup.addView(previewDisplayView);
     }
 
 
-    public void ArCoreCamera()
-    {
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
-        Collection<AugmentedFace> faces = session.getAllTrackables(AugmentedFace.class);
-
-        for (AugmentedFace face : faces) {
-            if (face.getTrackingState() == TrackingState.TRACKING) {
-                Log.v("FACE", "Tracking Face :)");
-                // UVs and indices can be cached as they do not change during the session.
-                FloatBuffer uvs = face.getMeshTextureCoordinates();
-                ShortBuffer indices = face.getMeshTriangleIndices();
-                // Center and region poses, mesh vertices, and normals are updated each frame.
-                Pose facePos3 = face.getCenterPose();
-                FloatBuffer faceVertices = face.getMeshVertices();
-                FloatBuffer faceNormals = face.getMeshNormals();
-                // Render the face using these values with OpenGL.
-            }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (PermissionHelper.cameraPermissionsGranted(this)) {
+            startCamera();
         }
-        Log.v("FACE", "-------------");
+    }
 
+    public void startCamera() {
     }
 
 
