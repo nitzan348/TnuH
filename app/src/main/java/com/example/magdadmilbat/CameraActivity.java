@@ -26,18 +26,11 @@ public class CameraActivity extends AppCompatActivity {
     private static final String TAG = "CameraAct";
     private CameraInput cameraInput;
     private FaceMesh faceMesh;
-    private SolutionGlSurfaceView<FaceMeshResult> glSurfaceView;
-
-    private SurfaceTexture previewFrameTexture;
-    private SurfaceView previewDisplayView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-
-        previewDisplayView = new SurfaceView(this);
-        setupPreviewDisplayView();
 
         PermissionHelper.checkAndRequestCameraPermissions(this);
 
@@ -53,17 +46,7 @@ public class CameraActivity extends AppCompatActivity {
                 (message, e) -> Log.e(TAG, "MediaPipe Face Mesh error:" + message));
 
         cameraInput = new CameraInput(this);
-        cameraInput.setNewFrameListener(val -> {
-            faceMesh.send(val);
-            Log.i(TAG, "updated frame");
-        });
-
-
-        glSurfaceView =
-                new SolutionGlSurfaceView<>(
-                        this, faceMesh.getGlContext(), faceMesh.getGlMajorVersion());
-        glSurfaceView.setSolutionResultRenderer(new FaceMeshResultGlRenderer());
-        glSurfaceView.setRenderInputImage(true);
+        cameraInput.setNewFrameListener(faceMesh::send);
 
         faceMesh.setResultListener(
                 faceMeshResult -> {
@@ -75,54 +58,21 @@ public class CameraActivity extends AppCompatActivity {
                                 String.format(
                                         "MediaPipe Face Mesh nose normalized coordinates (value range: [0, 1]): x=%f, y=%f",
                                         noseLandmark.getX(), noseLandmark.getY()));
-                        // Request GL rendering.
-                        glSurfaceView.setRenderData(faceMeshResult);
-                        glSurfaceView.requestRender();
                     } catch (IndexOutOfBoundsException e) {
                         Log.i(TAG, "NO FACEEEE");
                     }
                 });
-
-//        glSurfaceView.post(
-//                () -> {
-//                        cameraInput.start(
-//                                this,
-//                                faceMesh.getGlContext(),
-//                                CameraInput.CameraFacing.FRONT,
-//                                glSurfaceView.getWidth(),
-//                                glSurfaceView.getHeight());
-//                        Log.i(TAG, "Started Cam");
-//                });
-        glSurfaceView.setVisibility(View.VISIBLE);
 
         cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
                 1024, 768);
 
     }
 
-    private void setupPreviewDisplayView() {
-        previewDisplayView.setVisibility(View.GONE);
-        ViewGroup viewGroup = findViewById(R.id.preview_display_layout);
-        viewGroup.addView(previewDisplayView);
-    }
-
-
     @Override
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (PermissionHelper.cameraPermissionsGranted(this)) {
-            startCamera();
-        }
-    }
-
-    public void startCamera() {
     }
 
 
