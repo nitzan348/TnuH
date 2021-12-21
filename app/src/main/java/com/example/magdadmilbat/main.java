@@ -4,6 +4,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.highgui.HighGui;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 
 import javax.swing.*;
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.Vector;
 
 public class main {
-    private static final String filename = "src/thirdvid.mp4";
+    private static final String filename = "src/secondvid_edit.mp4";
+
     public static void main(String[] args){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // Loading the OpenCV library.
         int numOfFrames = 0;
@@ -32,6 +34,7 @@ public class main {
         jframe.setContentPane(vidPanel); // We assign vidpanel to the jframe we created.
         jframe.setSize(2000, 4000); // We set the frame size to 2000x4000
         jframe.setVisible(true); // We make the jframe visible.
+        double fps = vid.get(Videoio.CAP_PROP_FPS);
 
         while(vid.read(img)) {
 
@@ -46,19 +49,22 @@ public class main {
             https://docs.opencv.org/4.x/dd/d1a/group__imgproc__feature.html#ga47849c3be0d0406ad3ca45db65a25d2d
             */
             circles = new Mat(); // Will represent the circles we find.
-            Imgproc.HoughCircles(procImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1.0, 80, 110.0, 28.0, 40, 100); // param2 = 25 for vid2, param2 = 28 for vid1
+            Imgproc.HoughCircles(procImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1.0, 80, 110.0, 24.0, 40, 100); // param2 = 24 for vid2, param2 = 28 for vid1
 
             countOfBalls = 0;
             for (int x = 0; x < circles.cols(); x++) {
                 double[] c = circles.get(0, x); // Getting the circle, c is in the format of: {x, y, radius}.
                 Point center = new Point(Math.round(c[0]), Math.round(c[1]));
+                System.out.print(Math.abs(center.y - initialY) + "     "); // Printing the height
                 // Drawing the circle's center.
                 Imgproc.circle(img, center, 1, new Scalar(0, 100, 100), 3, 8, 0);
                 // Drawing the circle's outlines.
                 int radius = (int) Math.round(c[2]);
                 Imgproc.circle(img, center, radius, new Scalar(255, 0, 255), 3, 8, 0);
-                if(center.y >= initialY - RANGE && center.y <= initialY + RANGE) countOfBalls++; // Only counts the balls that are in the range of the initial Y axis position.
+                if(center.y >= initialY - RANGE && center.y <= initialY + RANGE) countOfBalls++;  // Only counts the balls that are in the range of the initial Y axis position.
             }
+
+            System.out.println();
 
             switch(countOfBalls){
                 case 3:
@@ -69,16 +75,16 @@ public class main {
                     thirdBallFramesCounter++;
                     break;
             }
-            System.out.println(countOfBalls); // Debugging print.
+
             ImageIcon result = new ImageIcon(Mat2BufferedImage(img));
             vidPanel.setIcon(result);
             vidPanel.repaint();
             numOfFrames++;
        }
 
-        System.out.println("Final Analysis: " + "\nFirst Ball: " + firstBallFramesCounter * 100 /numOfFrames
-                + "%\nSecond Ball: " + secondBallFramesCounter * 100 / numOfFrames
-                + "%\nThird Ball: " + thirdBallFramesCounter * 100 / numOfFrames + "%");
+        System.out.println("Final Analysis: " + "\nFirst Ball: " + firstBallFramesCounter / fps
+                + " seconds\nSecond Ball: " + secondBallFramesCounter / fps
+                + " seconds\nThird Ball: " + thirdBallFramesCounter / fps + " seconds");
     }
 
     /**
