@@ -33,7 +33,14 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
 
         PermissionHelper.checkAndRequestCameraPermissions(this);
+        setupMeshRecognizer();
+        setupCamera();
 
+        cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
+                1024, 768);
+    }
+
+    public void setupMeshRecognizer() {
         FaceMeshOptions faceMeshOptions =
                 FaceMeshOptions.builder()
                         .setStaticImageMode(false)
@@ -44,9 +51,6 @@ public class CameraActivity extends AppCompatActivity {
         faceMesh = new FaceMesh(this, faceMeshOptions);
         faceMesh.setErrorListener(
                 (message, e) -> Log.e(TAG, "MediaPipe Face Mesh error:" + message));
-
-        cameraInput = new CameraInput(this);
-        cameraInput.setNewFrameListener(faceMesh::send);
 
         faceMesh.setResultListener(
                 faceMeshResult -> {
@@ -62,10 +66,11 @@ public class CameraActivity extends AppCompatActivity {
                         Log.i(TAG, "NO FACEEEE");
                     }
                 });
+    }
 
-        cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
-                1024, 768);
-
+    private void setupCamera() {
+        cameraInput = new CameraInput(this);
+        cameraInput.setNewFrameListener(faceMesh::send);
     }
 
     @Override
@@ -74,6 +79,16 @@ public class CameraActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (PermissionHelper.cameraPermissionsGranted(this)) {
+            startCamera();
+        }
+    }
+
+    public void startCamera() {}
 
 
 }
