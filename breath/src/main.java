@@ -17,6 +17,9 @@ import java.util.Vector;
 public class main {
     private static final String filename = "src/secondvid_edit.mp4";
 
+    static Scalar[][] rgbRange= new Scalar[3][2];
+    static double ballArea;
+
     public static void main(String[] args){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // Loading the OpenCV library.
         int numOfFrames = 0;
@@ -42,12 +45,15 @@ public class main {
                 initialY = getFrameData(img);
             }
 
+
+
             procImg = prepareImage(img); // We prepare the image.
 
             /*
             We apply the HoughCircles algorithm, and get an array named circles that represents each circle we find.
             https://docs.opencv.org/4.x/dd/d1a/group__imgproc__feature.html#ga47849c3be0d0406ad3ca45db65a25d2d
             */
+            /*
             circles = new Mat(); // Will represent the circles we find.
             Imgproc.HoughCircles(procImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1.0, 80, 110.0, 24.0, 40, 100); // param2 = 24 for vid2, param2 = 28 for vid1
 
@@ -76,6 +82,9 @@ public class main {
                     break;
             }
 
+             */
+            img = findContoursAndDraw(img);
+
             ImageIcon result = new ImageIcon(Mat2BufferedImage(img));
             vidPanel.setIcon(result);
             vidPanel.repaint();
@@ -96,8 +105,91 @@ public class main {
         Mat procImg = prepareImage(img);
         Mat circles = new Mat();
 
+
         Imgproc.HoughCircles(procImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1.0, 80, 95.0, 26.0, 40, 100);
+
+        double[] c = circles.get(0, 0); // Getting the circle, c is in the format of: {x, y, radius}.
+        Point center = new Point(Math.round(c[0]), Math.round(c[1]));
+        double[] rgb = img.get((int)center.y, (int)center.x);
+        int sensitivity = 22;
+        rgbRange[0][0] = new Scalar(rgb[0] - sensitivity, rgb[1] - sensitivity, rgb[2] - sensitivity);
+        rgbRange[0][1] = new Scalar(rgb[0] + sensitivity, rgb[1] + sensitivity, rgb[2] + sensitivity);
+        ballArea = Math.PI * c[2] * c[2];
+
+
+        c = circles.get(0, 1);
+        center = new Point(Math.round(c[0]), Math.round(c[1]));
+        rgb = img.get((int)center.y, (int)center.x);
+        rgbRange[1][0] = new Scalar(rgb[0] - sensitivity, rgb[1] - sensitivity, rgb[2] - sensitivity);
+        rgbRange[1][1] = new Scalar(rgb[0] + sensitivity, rgb[1] + sensitivity, rgb[2] + sensitivity);
+        ballArea = Math.min(ballArea, Math.PI * c[2] * c[2]);
+
+        c = circles.get(0, 2);
+        center = new Point(Math.round(c[0]), Math.round(c[1]));
+        rgb = img.get((int)center.y, (int)center.x);
+        rgbRange[2][0] = new Scalar(rgb[0] - sensitivity, rgb[1] - sensitivity, rgb[2] - sensitivity);
+        rgbRange[2][1] = new Scalar(rgb[0] + sensitivity, rgb[1] + sensitivity, rgb[2] + sensitivity);
+        ballArea = Math.min(ballArea, Math.PI * c[2] * c[2]);
+
+
         return (int)Math.round(circles.get(0, 0)[1]);
+    }
+
+    private static Mat findContoursAndDraw(Mat img){
+        Mat green = new Mat();
+        Mat blue = new Mat();
+        Mat orange = new Mat();
+
+        Core.inRange(img, rgbRange[0][0], rgbRange[0][1], green);
+        Core.inRange(img, rgbRange[1][0], rgbRange[1][1], orange);
+        Core.inRange(img, rgbRange[2][0], rgbRange[2][1], blue);
+
+
+        List<MatOfPoint> greenContours = new ArrayList<MatOfPoint>();
+        List<MatOfPoint> blueContours = new ArrayList<MatOfPoint>();
+        List<MatOfPoint> orangeContours = new ArrayList<MatOfPoint>();
+
+        Imgproc.findContours(orange, greenContours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(blue, blueContours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(green, greenContours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+
+        double maxArea = ballArea * 0.4; // 500 for second vid
+        float[] radius = new float[1];
+        Point center = new Point();
+        for (int i = 0; i < greenContours.size(); i++) {
+            MatOfPoint cnt = greenContours.get(i);
+            if (Imgproc.contourArea(cnt) > maxArea) {
+                MatOfPoint2f c2f = new MatOfPoint2f(cnt.toArray());
+                Imgproc.minEnclosingCircle(c2f, center, radius);
+                if(radius[0] * radius[0] * Math.PI <= (ballArea * 1.9)) {
+                    Imgproc.circle(img, center, (int) radius[0], new Scalar(0, 0, 255), 3, 8, 0);
+               }
+            }
+        }
+
+        for (int i = 0; i < blueContours.size(); i++) {
+            MatOfPoint cnt = blueContours.get(i);
+            if (Imgproc.contourArea(cnt) > maxArea) {
+                MatOfPoint2f c2f = new MatOfPoint2f(cnt.toArray());
+                Imgproc.minEnclosingCircle(c2f, center, radius);
+                if(radius[0] * radius[0] * Math.PI <= (ballArea * 1.9)) {
+                    Imgproc.circle(img, center, (int) radius[0], new Scalar(0, 0, 255), 3, 8, 0);
+                }
+            }
+        }
+
+        for (int i = 0; i < orangeContours.size(); i++) {
+            MatOfPoint cnt = orangeContours.get(i);
+            if (Imgproc.contourArea(cnt) > maxArea) {
+                MatOfPoint2f c2f = new MatOfPoint2f(cnt.toArray());
+                Imgproc.minEnclosingCircle(c2f, center, radius);
+                if(radius[0] * radius[0] * Math.PI <= (ballArea * 1.9)) {
+                    Imgproc.circle(img, center, (int) radius[0], new Scalar(0, 0, 255), 3, 8, 0);
+                }
+            }
+        }
+
+        return img;
     }
 
     /**
