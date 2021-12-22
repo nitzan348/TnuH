@@ -1,8 +1,17 @@
 package com.example.magdadmilbat.vision;
 
+import com.google.mediapipe.formats.proto.LandmarkProto;
+
 import java.nio.FloatBuffer;
 
-public interface IMouth extends ISubMesh {
+public interface IMouth {
+
+    /**
+     * data from:
+     * https://raw.githubusercontent.com/google/mediapipe/a908d668c730da128dfa8d9f6bd25d519d006692/mediapipe/modules/face_geometry/data/canonical_face_model_uv_visualization.png
+     * @param face
+     */
+    void updateMouthData(LandmarkProto.NormalizedLandmarkList face);
 
     double getWidthNormalizer();
     double getHeightNormalizer();

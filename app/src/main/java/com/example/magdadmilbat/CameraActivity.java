@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.magdadmilbat.vision.FaceMeshResultGlRenderer;
+import com.example.magdadmilbat.vision.IMouth;
+import com.example.magdadmilbat.vision.SimpleMouth;
 import com.google.mediapipe.components.ExternalTextureConverter;
 import com.google.mediapipe.components.PermissionHelper;
 import com.google.mediapipe.formats.proto.LandmarkProto;
@@ -22,6 +24,8 @@ import com.google.mediapipe.solutioncore.SolutionGlSurfaceView;
 import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
+
+import java.util.List;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -102,14 +106,18 @@ public class CameraActivity extends AppCompatActivity {
 
         faceMesh.setResultListener(
                 faceMeshResult -> {
+
+
                     try {
-                        LandmarkProto.NormalizedLandmark noseLandmark =
-                                faceMeshResult.multiFaceLandmarks().get(0).getLandmarkList().get(1);
+                        LandmarkProto.NormalizedLandmarkList face =
+                                faceMeshResult.multiFaceLandmarks().get(0);
+                        IMouth mouth = new SimpleMouth();
+                        mouth.updateMouthData(face);
                         Log.i(
                                 TAG,
                                 String.format(
-                                        "MediaPipe Face Mesh nose normalized coordinates (value range: [0, 1]): x=%f, y=%f",
-                                        noseLandmark.getX(), noseLandmark.getY()));
+                                        "Mouth data: area=%f, symmetry=%f",
+                                        mouth.getArea(), mouth.getSymmetryCoef()));
                     } catch (IndexOutOfBoundsException e) {
                         Log.i(TAG, "NO FACEEEE");
                     }
