@@ -46,10 +46,9 @@ public class main {
             }
 
 
-
+            /*
             procImg = prepareImage(img); // We prepare the image.
 
-            /*
             We apply the HoughCircles algorithm, and get an array named circles that represents each circle we find.
             https://docs.opencv.org/4.x/dd/d1a/group__imgproc__feature.html#ga47849c3be0d0406ad3ca45db65a25d2d
             */
