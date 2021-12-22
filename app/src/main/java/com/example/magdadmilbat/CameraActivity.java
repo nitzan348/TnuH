@@ -12,7 +12,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.magdadmilbat.vision.FaceMeshResultGlRenderer;
 import com.example.magdadmilbat.vision.IMouth;
 import com.example.magdadmilbat.vision.SimpleMouth;
 import com.google.mediapipe.components.ExternalTextureConverter;

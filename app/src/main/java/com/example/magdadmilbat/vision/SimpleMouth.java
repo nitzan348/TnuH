@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 public class SimpleMouth implements IMouth {
 
-    private LandmarkProto.NormalizedLandmark cornerRight, cornerLeft, top, bot;
+    private LandmarkProto.NormalizedLandmark cornerRight, cornerLeft, top, bot, faceTop, faceBot;
 
     @Override
     public void updateMouthData(LandmarkProto.NormalizedLandmarkList face) {
@@ -14,16 +14,18 @@ public class SimpleMouth implements IMouth {
         cornerRight = face.getLandmark(291);
         top = face.getLandmark(0);
         bot = face.getLandmark(17);
+        faceTop = face.getLandmark(10);
+        faceBot = face.getLandmark(152);
     }
 
     @Override
     public double getWidthNormalizer() {
-        return 1;
+        return Math.abs(faceTop.getY() - faceBot.getY());
     }
 
     @Override
     public double getHeightNormalizer() {
-        return 1;
+        return getWidthNormalizer();
     }
 
     @Override
