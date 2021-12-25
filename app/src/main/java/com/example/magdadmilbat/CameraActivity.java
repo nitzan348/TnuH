@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.magdadmilbat.vision.IMouth;
 import com.example.magdadmilbat.vision.SimpleMouth;
+import com.example.magdadmilbat.vision.SimpleMouth2;
 import com.google.mediapipe.components.PermissionHelper;
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.solutioncore.CameraInput;
@@ -59,7 +60,7 @@ public class CameraActivity extends AppCompatActivity {
                     try {
                         LandmarkProto.NormalizedLandmarkList face =
                                 faceMeshResult.multiFaceLandmarks().get(0);
-                        IMouth mouth = new SimpleMouth();
+                        IMouth mouth = new SimpleMouth2();
                         mouth.updateMouthData(face);
 
                         if (((System.currentTimeMillis() % 1000) / 100) % 7 == 0) {
