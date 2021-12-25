@@ -2,8 +2,6 @@ package com.example.magdadmilbat.vision;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 
-import java.nio.FloatBuffer;
-
 public class SimpleMouth implements IMouth {
 
     private LandmarkProto.NormalizedLandmark cornerRight, cornerLeft, top, bot, faceTop, faceBot;
@@ -40,7 +38,7 @@ public class SimpleMouth implements IMouth {
 
     @Override
     public double getSymmetryCoef() {
-        return Math.abs(cornerRight.getY() - cornerLeft.getY())/getHeightNormalizer()
-                + Math.abs(top.getX() - bot.getX())/getWidthNormalizer();
+        return Math.abs(cornerRight.getY() - cornerLeft.getY()) / getHeightNormalizer()
+                + Math.abs(top.getX() - bot.getX()) / getWidthNormalizer();
     }
 }
