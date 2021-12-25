@@ -2,6 +2,9 @@ package com.example.magdadmilbat.vision;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 
+/**
+ * Simplest implemetation of the IMouth interface. See IMouth for documentation
+ */
 public class SimpleMouth implements IMouth {
 
     private LandmarkProto.NormalizedLandmark cornerRight, cornerLeft, top, bot, faceTop, faceBot;
