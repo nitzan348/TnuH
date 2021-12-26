@@ -1,4 +1,4 @@
-package com.example.magdadmilbat;
+package talpiot.mb.magdadmilbat;
 
 import android.content.Intent;
 import android.hardware.Camera;
@@ -14,16 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
-import com.example.magdadmilbat.vision.IMouth;
-import com.example.magdadmilbat.vision.SimpleMouth;
+import talpiot.mb.magdadmilbat.vision.IMouth;
+import talpiot.mb.magdadmilbat.vision.SimpleMouth;
 import com.google.mediapipe.components.PermissionHelper;
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.solutioncore.CameraInput;
 import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class ExercisePage extends AppCompatActivity implements View.OnClickListener {
 
@@ -47,7 +44,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
      * I'm not sure what they do, my best guess is they define the frame dimensions returned
      * by the camera object
      */
-    private static final int WIDTH = 1024, HEIGHT = 768gut ;
+    private static final int WIDTH = 960, HEIGHT = 720;
     private static final int CAMERA_ID = 1;
 
     private Button btnBack;
@@ -69,8 +66,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         requestPermissions(new String[]{"android.permission.CAMERA"}, CAMERA_ID);
 
         setupMeshRecognizer();
-        startCamera();
-        startRecording();
     }
 
     @Override
@@ -134,10 +129,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (PermissionHelper.cameraPermissionsGranted(this)) {
-            startCamera();
-            startRecording();
-        }
+        startCamera();
     }
 
     @Override
@@ -145,7 +137,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         if (PermissionHelper.cameraPermissionsGranted(this)) {
             startCamera();
-            startRecording();
         } else {
             PermissionHelper.checkAndRequestCameraPermissions(this);
         }
@@ -155,6 +146,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
         cameraInput.close();
+        cameraInput = null;
     }
 
 
@@ -169,15 +161,12 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         // Create new camares and send it's frames to the FaceMesh object
         cameraInput = new CameraInput(this);
         cameraInput.setNewFrameListener(frame -> {
-            Log.i(TAG, "FRAME SENT");
             faceMesh.send(frame);
         });
         // Start the camera
         cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
                 WIDTH, HEIGHT);
-    }
 
-    public void startRecording() {
         FrameLayout frame = findViewById(R.id.preview_display_layout);
         if (cameraDisplay == null) {
             cameraDisplay = new ShowCamera(this, Camera.open(CAMERA_ID));

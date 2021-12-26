@@ -1,4 +1,4 @@
-package com.example.magdadmilbat;
+package talpiot.mb.magdadmilbat;
 
 public class Details {
     private String exercise;

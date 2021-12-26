@@ -1,4 +1,4 @@
-package com.example.magdadmilbat;
+package talpiot.mb.magdadmilbat;
 
 import android.content.Context;
 import android.content.res.Configuration;

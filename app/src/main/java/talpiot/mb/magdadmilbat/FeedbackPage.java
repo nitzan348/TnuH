@@ -1,8 +1,10 @@
-package com.example.MagdadMilbat;
+package talpiot.mb.magdadmilbat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.MagdadMilbat.R;
 
 public class FeedbackPage extends AppCompatActivity {
 

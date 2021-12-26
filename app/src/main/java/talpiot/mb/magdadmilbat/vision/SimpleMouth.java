@@ -1,4 +1,4 @@
-package com.example.magdadmilbat.vision;
+package talpiot.mb.magdadmilbat.vision;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 

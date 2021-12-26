@@ -1,4 +1,4 @@
-package com.example.magdadmilbat;
+package talpiot.mb.magdadmilbat;
 
 import androidx.appcompat.app.AppCompatActivity;
 

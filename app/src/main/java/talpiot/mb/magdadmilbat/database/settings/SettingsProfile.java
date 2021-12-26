@@ -1,4 +1,4 @@
-package com.example.magdadmilbat.database.settings;
+package talpiot.mb.magdadmilbat.database.settings;
 
 import java.util.HashMap;
 import java.util.List;

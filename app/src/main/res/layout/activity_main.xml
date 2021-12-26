@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.magdadmilbat.MainActivity">
+    tools:context="talpiot.mb.magdadmilbat.MainActivity">
 
     <Button
         android:id="@+id/btnStartExercise"
