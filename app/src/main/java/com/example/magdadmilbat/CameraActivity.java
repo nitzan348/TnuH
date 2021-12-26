@@ -1,8 +1,11 @@
 package com.example.magdadmilbat;
 
+import android.app.appsearch.GetByDocumentIdRequest;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,7 @@ public class CameraActivity extends AppCompatActivity {
      * Object responsible for retreiving camera frames
      */
     private CameraInput cameraInput;
+    private ShowCamera cameraDisplay;
     /**
      * Mediapipe object that handles face recognition and mesh generation
      */
@@ -41,6 +45,7 @@ public class CameraActivity extends AppCompatActivity {
      * by the camera object
      */
     private static final int WIDTH = 1024, HEIGHT = 768;
+    private static final int CAMERA_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class CameraActivity extends AppCompatActivity {
 
         // I'm pretty sure only one of those lines is needed, but better safe than sorry
         PermissionHelper.checkAndRequestCameraPermissions(this);
-        requestPermissions(new String[]{"android.permission.CAMERA"}, 1);
+        requestPermissions(new String[]{"android.permission.CAMERA"}, CAMERA_ID);
 
         setupMeshRecognizer();
         startCamera();
@@ -97,15 +102,7 @@ public class CameraActivity extends AppCompatActivity {
                                                     mouth.getSymmetryCoef(), mouth.getArea(),
                                                     mouth.getBigMouthScore(), mouth.getSmileScore())));
                         }
-
-                        Log.i(
-                                TAG,
-                                String.format(
-                                        "Mouth data: area=%f, symmetry=%f",
-                                        mouth.getArea(), mouth.getSymmetryCoef()));
-
                     } catch (IndexOutOfBoundsException e) {
-                        Log.i(TAG, "NO FACEEEE");
                     }
                 });
     }
@@ -115,6 +112,7 @@ public class CameraActivity extends AppCompatActivity {
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        startCamera();
     }
 
     @Override
@@ -150,6 +148,12 @@ public class CameraActivity extends AppCompatActivity {
         // Start the camera
         cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
                 WIDTH, HEIGHT);
+
+        FrameLayout frame = findViewById(R.id.preview_display_layout);
+        if (cameraDisplay == null) {
+            cameraDisplay = new ShowCamera(this, Camera.open(CAMERA_ID));
+            frame.addView(cameraDisplay);
+        }
     }
 
 

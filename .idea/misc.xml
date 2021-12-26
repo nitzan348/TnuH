@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.23385416666666667" />
         <entry key="app/src/main/res/layout/activity_camera.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_exercise_page.xml" value="0.10460992907801418" />
+        <entry key="app/src/main/res/layout/activity_exercise_details.xml" value="0.21041666666666667" />
+        <entry key="app/src/main/res/layout/activity_exercise_page.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_exr_choice_screen.xml" value="0.1859375" />
+        <entry key="app/src/main/res/layout/activity_feedback_page.xml" value="0.21041666666666667" />
         <entry key="app/src/main/res/layout/activity_history_page.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10460992907801418" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.21510416666666668" />
