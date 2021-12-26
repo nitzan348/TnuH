@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.MagdadMilbat.R;
 import com.example.magdadmilbat.vision.IMouth;
 import com.example.magdadmilbat.vision.SimpleMouth;
 import com.google.mediapipe.components.PermissionHelper;
