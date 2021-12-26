@@ -47,7 +47,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
      * I'm not sure what they do, my best guess is they define the frame dimensions returned
      * by the camera object
      */
-    private static final int WIDTH = 1024, HEIGHT = 768;
+    private static final int WIDTH = 1024, HEIGHT = 768gut ;
     private static final int CAMERA_ID = 1;
 
     private Button btnBack;
@@ -70,6 +70,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
 
         setupMeshRecognizer();
         startCamera();
+        startRecording();
     }
 
     @Override
@@ -96,12 +97,13 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                 (message, e) -> Log.e(TAG, "MediaPipe Face Mesh error:" + message));
 
         // For showing the vision data on screen, not actually required
-        TextView debugView = findViewById(R.id.debug_view);
+        TextView debugView = findViewById(R.id.exerciseQualDisplay);
         Handler textUpdater = new Handler();
 
         // Everytime a face mesh is detected the given function is called
         faceMesh.setResultListener(
                 faceMeshResult -> {
+                    Log.i(TAG, "asdsada");
                     try {
                         // The next line gets a "Face" object from the face list
                         LandmarkProto.NormalizedLandmarkList face =
@@ -115,8 +117,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                         if (((System.currentTimeMillis() % 1000) / 100) % 7 == 0) {
                             textUpdater.post(() ->
                                     debugView.setText(
-                                            String.format("Width = %f, Height = %f.\n" +
-                                                            "Symmetry = %f, Area = %f\n" +
+                                            String.format("Width = %f, Height = %f. " +
+                                                            "Symmetry = %f, Area = %f " +
                                                             "Wide Score = %f, Smile Score = %f",
                                                     mouth.getWidth(), mouth.getHeight(),
                                                     mouth.getSymmetryCoef(), mouth.getArea(),
@@ -132,7 +134,10 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        startCamera();
+        if (PermissionHelper.cameraPermissionsGranted(this)) {
+            startCamera();
+            startRecording();
+        }
     }
 
     @Override
@@ -140,6 +145,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         if (PermissionHelper.cameraPermissionsGranted(this)) {
             startCamera();
+            startRecording();
         } else {
             PermissionHelper.checkAndRequestCameraPermissions(this);
         }
@@ -163,12 +169,15 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         // Create new camares and send it's frames to the FaceMesh object
         cameraInput = new CameraInput(this);
         cameraInput.setNewFrameListener(frame -> {
+            Log.i(TAG, "FRAME SENT");
             faceMesh.send(frame);
         });
         // Start the camera
         cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
                 WIDTH, HEIGHT);
+    }
 
+    public void startRecording() {
         FrameLayout frame = findViewById(R.id.preview_display_layout);
         if (cameraDisplay == null) {
             cameraDisplay = new ShowCamera(this, Camera.open(CAMERA_ID));
