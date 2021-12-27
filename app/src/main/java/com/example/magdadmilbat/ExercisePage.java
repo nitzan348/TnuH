@@ -374,7 +374,7 @@ public class ExercisePage extends Activity implements View.OnClickListener, Came
        double maxHeight = 0;
        ArrayList<Double> temp = color == 1 ? greenHeight : color == 2 ? blueHeight : color == 3 ? orangeHeight : null;
        for(int i = 0; i < temp.size(); i++){
-            int currHeight = temp.get(i);
+            double currHeight = temp.get(i);
             maxHeight = maxHeight > currHeight ? maxHeight : currHeight;
        }
        return maxHeight;
