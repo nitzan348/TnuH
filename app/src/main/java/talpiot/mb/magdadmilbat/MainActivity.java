@@ -12,6 +12,7 @@ import com.example.MagdadMilbat.R;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnStartExercise, btnHistory, btnSettings;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

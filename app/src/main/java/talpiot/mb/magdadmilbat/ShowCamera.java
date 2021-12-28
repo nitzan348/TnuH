@@ -13,8 +13,8 @@ import java.util.List;
 
 public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback
     {
-    Camera camera;
-    SurfaceHolder holder;
+    private Camera camera;
+    private SurfaceHolder holder;
 
     public ShowCamera(Context context, Camera camera) {
         super(context);

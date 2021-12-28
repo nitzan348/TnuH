@@ -1,26 +1,45 @@
 package talpiot.mb.magdadmilbat;
 
 import android.content.Intent;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Size;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
+
+import talpiot.mb.magdadmilbat.vision.FaceMeshResultImageView;
 import talpiot.mb.magdadmilbat.vision.IMouth;
 import talpiot.mb.magdadmilbat.vision.SimpleMouth;
+
+import com.google.mediapipe.components.CameraXPreviewHelper;
+import com.google.mediapipe.components.ExternalTextureConverter;
+import com.google.mediapipe.components.FrameProcessor;
 import com.google.mediapipe.components.PermissionHelper;
 import com.google.mediapipe.formats.proto.LandmarkProto;
+import com.google.mediapipe.framework.TextureFrame;
+import com.google.mediapipe.glutil.EglManager;
 import com.google.mediapipe.solutioncore.CameraInput;
 import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
+
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Field;
 
 public class ExercisePage extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,11 +52,11 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
      * Object responsible for retreiving camera frames
      */
     private CameraInput cameraInput;
-    private ShowCamera cameraDisplay;
     /**
      * Mediapipe object that handles face recognition and mesh generation
      */
     private FaceMesh faceMesh;
+    private FaceMeshResultImageView imageView;
 
     /**
      * Width and height parameters for the CameraInput object.
@@ -66,6 +85,13 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         requestPermissions(new String[]{"android.permission.CAMERA"}, CAMERA_ID);
 
         setupMeshRecognizer();
+        imageView = new FaceMeshResultImageView(this);
+
+        FrameLayout frameLayout = findViewById(R.id.preview_display_layout);
+        frameLayout.removeAllViewsInLayout();
+        imageView.setImageDrawable(null);
+        frameLayout.addView(imageView);
+        imageView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -118,7 +144,10 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                                                     mouth.getWidth(), mouth.getHeight(),
                                                     mouth.getSymmetryCoef(), mouth.getArea(),
                                                     mouth.getBigMouthScore(), mouth.getSmileScore())));
+
                         }
+                        imageView.setFaceMeshResult(faceMeshResult);
+                        runOnUiThread(() -> imageView.update());
                     } catch (IndexOutOfBoundsException e) {
                     }
                 });
@@ -129,7 +158,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        startCamera();
     }
 
     @Override
@@ -140,6 +168,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         } else {
             PermissionHelper.checkAndRequestCameraPermissions(this);
         }
+
     }
 
     @Override
@@ -148,7 +177,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         cameraInput.close();
         cameraInput = null;
     }
-
 
     /**
      * Creates and start the camera
@@ -167,10 +195,5 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         cameraInput.start(this, faceMesh.getGlContext(), CameraInput.CameraFacing.FRONT,
                 WIDTH, HEIGHT);
 
-        FrameLayout frame = findViewById(R.id.preview_display_layout);
-        if (cameraDisplay == null) {
-            cameraDisplay = new ShowCamera(this, Camera.open(CAMERA_ID));
-            frame.addView(cameraDisplay);
-        }
     }
 }
