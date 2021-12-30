@@ -18,8 +18,8 @@ import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 import talpiot.mb.magdadmilbat.vision.detectors.SimpleMouth;
 
 /**
- * This class handles all of the vision for the project. See <link>ExercisePage</link>
- * for usage example
+ * This class handles all of the vision for the project. See {@link talpiot.mb.magdadmilbat.ExercisePage}
+ * for usage example.
  */
 public class VisionMaster {
     /**
@@ -62,7 +62,7 @@ public class VisionMaster {
         return currentFace;
     }
 
-    static class DecomposedFace {
+    public static class DecomposedFace {
         private final IMouth mouth;
 
         private DecomposedFace(IMouth mouth) {
@@ -138,7 +138,6 @@ public class VisionMaster {
                         // Draw image
                         imageView.setFaceMeshResult(faceMeshResult);
                         uiUpdater.post(() -> imageView.update());
-
                     }
                 });
     }

@@ -27,6 +27,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
 
     private Button btnBack;
     private TextView tvRepetition, tvExercise;
+    private boolean stopThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,27 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         if (PermissionHelper.cameraPermissionsGranted(this)) {
             vision.attachCamera(this);
+
+            stopThread = false;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    TextView txt = findViewById(R.id.exerciseQualDisplay);
+                    while (!stopThread) {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (vision.getCurrentFace() != null) {
+                            runOnUiThread(() -> txt.setText(
+                                    String.format("%o",
+                                            (int)(1000*vision.getCurrentFace().getMouth().getArea()))
+                            ));
+                        }
+                    }
+                }
+            }).start();
         } else {
             PermissionHelper.checkAndRequestCameraPermissions(this);
         }
@@ -78,6 +100,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
+        stopThread = true;
     }
 
 }

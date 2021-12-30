@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="talpiot.mb.magdadmilbat.ExercisePage">
 
     <LinearLayout
@@ -37,31 +37,35 @@
 
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/exerciseQualDisplay"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:text="quality"
-        android:textSize="20sp" />
-
-
-    <FrameLayout
-        android:id="@+id/preview_display_layout"
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@color/black">
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/no_camera_access_view"
+            android:id="@+id/exerciseQualDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:elevation="1dp"
+            android:text="tmp"
+            android:textColor="@color/teal_700"
+            android:textSize="70sp" />
+
+        <FrameLayout
+            android:id="@+id/preview_display_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:gravity="center"
-            android:text="@string/no_camera_access" />
-    </FrameLayout>
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/black">
+            <TextView
+                android:id="@+id/no_camera_access_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="@string/no_camera_access" />
+        </FrameLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>
