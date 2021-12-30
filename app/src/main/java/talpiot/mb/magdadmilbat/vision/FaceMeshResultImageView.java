@@ -22,14 +22,19 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import androidx.appcompat.widget.AppCompatImageView;
 import android.util.Size;
-import com.google.common.collect.ImmutableSet;
+
 import com.google.mediapipe.formats.proto.LandmarkProto.NormalizedLandmark;
-import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshConnections;
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
 import java.util.List;
 
-/** An ImageView implementation for displaying {@link FaceMeshResult}. */
+/**
+ * An ImageView implementation for displaying {@link FaceMeshResult}.
+ *
+ * Copied and modified from:
+ * https://github.com/google/mediapipe/tree/master/mediapipe/examples/android/solutions/facemesh
+ *
+ */
 public class FaceMeshResultImageView extends AppCompatImageView {
     private static final String TAG = "FaceMeshResultImageView";
 
@@ -68,13 +73,11 @@ public class FaceMeshResultImageView extends AppCompatImageView {
 
         int numFaces = result.multiFaceLandmarks().size();
         for (int i = 0; i < numFaces; ++i) {
-            drawLandmarksOnCanvas(
+            drawLips(
                     canvas,
                     result.multiFaceLandmarks().get(i).getLandmarkList(),
-                    FaceMeshConnections.FACEMESH_LIPS,
-                    imageSize,
-                    LIPS_COLOR,
-                    LIPS_THICKNESS);
+                    imageSize
+            );
         }
     }
 
@@ -86,18 +89,15 @@ public class FaceMeshResultImageView extends AppCompatImageView {
         }
     }
 
-    private void drawLandmarksOnCanvas(
+    private void drawLips(
             Canvas canvas,
             List<NormalizedLandmark> faceLandmarkList,
-            ImmutableSet<FaceMeshConnections.Connection> connections,
-            Size imageSize,
-            int color,
-            int thickness) {
+            Size imageSize) {
         // Draw connections.
-        for (FaceMeshConnections.Connection c : connections) {
+        for (FaceMeshConnections.Connection c : FaceMeshConnections.FACEMESH_LIPS) {
             Paint connectionPaint = new Paint();
-            connectionPaint.setColor(color);
-            connectionPaint.setStrokeWidth(thickness);
+            connectionPaint.setColor(FaceMeshResultImageView.LIPS_COLOR);
+            connectionPaint.setStrokeWidth(FaceMeshResultImageView.LIPS_THICKNESS);
             NormalizedLandmark start = faceLandmarkList.get(c.start());
             NormalizedLandmark end = faceLandmarkList.get(c.end());
             canvas.drawLine(

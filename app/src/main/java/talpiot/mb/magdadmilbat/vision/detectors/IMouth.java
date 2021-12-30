@@ -1,4 +1,4 @@
-package talpiot.mb.magdadmilbat.vision;
+package talpiot.mb.magdadmilbat.vision.detectors;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 
