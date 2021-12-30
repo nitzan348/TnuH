@@ -13,6 +13,7 @@ import com.example.MagdadMilbat.R;
 import com.google.mediapipe.components.PermissionHelper;
 
 import talpiot.mb.magdadmilbat.vision.VisionMaster;
+import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 
 public class ExercisePage extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,9 +84,11 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                             e.printStackTrace();
                         }
                         if (vision.getCurrentFace() != null) {
+                            IMouth mouth = vision.getCurrentFace().getMouth();
                             runOnUiThread(() -> txt.setText(
                                     String.format("%o",
-                                            (int)(1000*vision.getCurrentFace().getMouth().getArea()))
+                                            (int) (1000 * mouth.getArea() /
+                                                    (mouth.getHeightNormalizer() * mouth.getWidthNormalizer())))
                             ));
                         }
                     }
