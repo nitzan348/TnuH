@@ -1,17 +1,19 @@
-package talpiot.mb.magdadmilbat;
+package talpiot.mb.magdadmilbat.database;
 
-public class Training {
+public class TrainingData {
     //private Date date;
     private String date;
-    private String time;
+    private String time; // Training start time
     private String exerciseDescription;
     private int trainingQuality;
+    private double duration;//duration that the Training take
 
-    public Training(String date, String time, String exerciseDescription, int trainingQuality) {
+    public TrainingData(String date, String time, String exerciseDescription, int trainingQuality, double duration) {
         this.date = date;
         this.time = time;
         this.exerciseDescription = exerciseDescription;
         this.trainingQuality = trainingQuality;
+        this.duration = duration;
     }
 
     public String getDate() {
@@ -24,6 +26,10 @@ public class Training {
 
     public String getTime() {
         return time;
+    }
+
+    public double getDuration() {
+        return this.duration;
     }
 
     public void setTime(String time) {
@@ -52,7 +58,8 @@ public class Training {
                 "Date='" + date + '\'' +
                 ", Time='" + time + '\'' +
                 ", Exercise Description: '" + exerciseDescription + '\'' +
-                ", Training Quality: " + trainingQuality +
+                ", Training Quality: " + trainingQuality + '\'' +
+                ", duration:" + duration +
                 '}';
     }
 }

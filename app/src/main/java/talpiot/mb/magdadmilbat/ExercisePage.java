@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.MagdadMilbat.R;
 import com.google.mediapipe.components.PermissionHelper;
 
+import talpiot.mb.magdadmilbat.database.DatabaseManager;
 import talpiot.mb.magdadmilbat.vision.VisionMaster;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 

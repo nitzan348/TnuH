@@ -9,13 +9,13 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
-import java.util.ArrayList;
+
+import talpiot.mb.magdadmilbat.database.TrainingDataAdapter;
 
 public class HistoryPage extends AppCompatActivity implements View.OnClickListener {
     Button btnBack;
     ListView lvHistory;
-    ArrayList<Details> details;
-    DetailsAdapter detailsAdapter;
+    TrainingDataAdapter detailsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,7 @@ public class HistoryPage extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_history_page);
 
         btnBack = (Button)findViewById(R.id.btnBack);
-        details = new ArrayList<Details>();
-        detailsAdapter = new DetailsAdapter(this, details);
+        detailsAdapter = new TrainingDataAdapter(this);
         lvHistory = (ListView)findViewById(R.id.lvHistory);
 
         lvHistory.setAdapter(detailsAdapter);

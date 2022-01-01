@@ -1,4 +1,4 @@
-package talpiot.mb.magdadmilbat;
+package talpiot.mb.magdadmilbat.database;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,16 +12,19 @@ import android.widget.TextView;
 import com.example.MagdadMilbat.R;
 import java.util.List;
 
-public class DetailsAdapter extends ArrayAdapter<Details> {
+public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
+    private Context context;
+    private List<TrainingData> data;
+    private DatabaseManager manager;
 
-    Context context;
-    List<Details> data;
-
-    public DetailsAdapter(Context context, List<Details> data) {
-        super(context, 0, 0, data);
-
+    public TrainingDataAdapter(Context context) {
+        super(context,
+                0,
+                0,
+                new DatabaseManager(context).getAllTraining());
         this.context = context;
-        this.data = data;
+        this.manager = new DatabaseManager(context);
+        this.data = manager.getAllTraining();
     }
 
     @Override
@@ -30,13 +33,11 @@ public class DetailsAdapter extends ArrayAdapter<Details> {
         @SuppressLint("ViewHolder") View view = layoutInflater.inflate(R.layout.activity_exercise_details, parent, false);
 
         TextView tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-//        TextView tvQuality = (TextView) view.findViewById(R.id.tvQuality);
         TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
         TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
 
-        Details temp = data.get(position);
-        tvExercise.setText(temp.getExercise());
-//        tvQuality.setText(temp.getRepetition());
+        TrainingData temp = data.get(position);
+        tvExercise.setText(temp.toString());
         tvDate.setText(temp.getDate());
         tvTime.setText(temp.getTime());
 
