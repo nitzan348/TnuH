@@ -2,26 +2,28 @@ package talpiot.mb.magdadmilbat.vision.detectors;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 
+import talpiot.mb.magdadmilbat.vision.Point;
+
 /**
  * Simplest implemetation of the IMouth interface. See IMouth for documentation
  */
 public class SimpleMouth implements IMouth {
 
-    private LandmarkProto.NormalizedLandmark cornerRight, cornerLeft, top, bot, faceTop, faceBot;
+    private Point cornerRight, cornerLeft, top, bot, faceTop, faceBot;
 
     @Override
     public void updateMouthData(LandmarkProto.NormalizedLandmarkList face) {
-        cornerLeft = face.getLandmark(61);
-        cornerRight = face.getLandmark(291);
-        top = face.getLandmark(0);
-        bot = face.getLandmark(17);
-        faceTop = face.getLandmark(10);
-        faceBot = face.getLandmark(152);
+        cornerLeft = new Point(face.getLandmark(61));
+        cornerRight = new Point(face.getLandmark(291));
+        top = new Point(face.getLandmark(0));
+        bot = new Point(face.getLandmark(17));
+        faceTop = new Point(face.getLandmark(10));
+        faceBot = new Point(face.getLandmark(152));
     }
 
     @Override
     public double getWidthNormalizer() {
-        return Math.abs(faceTop.getY() - faceBot.getY());
+        return Point.dist(faceTop, faceBot);
     }
 
     @Override
@@ -31,17 +33,37 @@ public class SimpleMouth implements IMouth {
 
     @Override
     public double getWidth() {
-        return Math.abs(cornerRight.getX() - cornerLeft.getX());
+        return Math.abs(Point.subtract(cornerRight, cornerLeft)
+                .rotateToNormalize(Point.subtract(faceTop, faceBot))
+                .getY());
     }
 
     @Override
     public double getHeight() {
-        return Math.abs(top.getY() - bot.getY());
+        return Math.abs(Point.subtract(top, bot)
+                .rotateToNormalize(Point.subtract(faceTop, faceBot))
+                .getX());
     }
 
     @Override
     public double getSymmetryCoef() {
-        return Math.abs(cornerRight.getY() - cornerLeft.getY()) / getHeightNormalizer()
-                + Math.abs(top.getX() - bot.getX()) / getWidthNormalizer();
+        return Math.abs(Point.subtract(top, bot)
+                .rotateToNormalize(Point.subtract(faceTop, faceBot))
+                .getY()) / getHeightNormalizer()
+                + Math.abs(Point.subtract(cornerRight, cornerLeft)
+                .rotateToNormalize(Point.subtract(faceTop, faceBot))
+                .getX()) / getWidthNormalizer();
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleMouth{" +
+                "width=" + getWidth() +
+                ", height=" + getHeight() +
+                ", symm=" + getSymmetryCoef() +
+                ", smile=" + getSmileScore() +
+                ", openMouth=" + getBigMouthScore() +
+                ", area=" + getArea() +
+                '}';
     }
 }
