@@ -14,6 +14,13 @@ import com.google.mediapipe.solutioncore.CameraInput;
 import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+import talpiot.mb.magdadmilbat.database.DatabaseManager;
+import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 import talpiot.mb.magdadmilbat.vision.detectors.SimpleMouth;
 
@@ -21,7 +28,7 @@ import talpiot.mb.magdadmilbat.vision.detectors.SimpleMouth;
  * This class handles all of the vision for the project. See {@link talpiot.mb.magdadmilbat.ExercisePage}
  * for usage example.
  */
-public class VisionMaster {
+public class VisionMaster extends Thread {
     /**
      * Tag for logging
      */
@@ -51,6 +58,16 @@ public class VisionMaster {
     private VisionMaster() {
     }
 
+    public void startNewSession() {
+        DatabaseManager thread = new DatabaseManager(imageView.getContext());
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        TrainingData training(c, );
+        thread.addTraining(TrainingData training);
+
+    }
+
     public static VisionMaster getInstance() {
         if (instance == null) {
             instance = new VisionMaster();
@@ -59,6 +76,7 @@ public class VisionMaster {
     }
 
     public DecomposedFace getCurrentFace() {
+
         return currentFace;
     }
 
