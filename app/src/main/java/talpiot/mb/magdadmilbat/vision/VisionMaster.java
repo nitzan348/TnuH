@@ -51,7 +51,7 @@ public class VisionMaster extends Thread {
      * I'm not sure what they do, my best guess is they define the frame dimensions returned
      * by the camera object
      */
-    private static final int WIDTH = 960, HEIGHT = 720;
+    public static final int WIDTH = 960, HEIGHT = 720;
 
     private DecomposedFace currentFace;
 
@@ -59,13 +59,12 @@ public class VisionMaster extends Thread {
     }
 
     public void startNewSession() {
-        DatabaseManager thread = new DatabaseManager(imageView.getContext());
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-        String formattedDate = df.format(c);
-        TrainingData training(c, );
-        thread.addTraining(TrainingData training);
-
+//        DatabaseManager thread = new DatabaseManager(imageView.getContext());
+//        Date c = Calendar.getInstance().getTime();
+//        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+//        String formattedDate = df.format(c);
+//        TrainingData training(c, );
+//        thread.addTraining(TrainingData training);
     }
 
     public static VisionMaster getInstance() {

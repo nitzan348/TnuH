@@ -22,8 +22,12 @@ public class Point {
         this.setY(y);
     }
 
+    /**
+     * Import a landmark into a point. normalizes so x and y have the same units
+     * @param landmark
+     */
     public Point(LandmarkProto.NormalizedLandmark landmark) {
-        this(landmark.getX(), landmark.getY());
+        this(landmark.getX() * VisionMaster.HEIGHT, landmark.getY() * VisionMaster.WIDTH);
     }
 
     public static Point cis(double ang, double len) {
@@ -69,8 +73,8 @@ public class Point {
         double cos = Math.cos(radians),
                 sin = Math.sin(radians);
         Point temp = this.clone();
-        temp.setX(this.y * sin + this.x * cos);
-        temp.setY(this.y * cos - this.x * sin);
+        temp.setX(- this.y * sin + this.x * cos);
+        temp.setY(this.y * cos + this.x * sin);
         return temp;
     }
 

@@ -3,6 +3,7 @@ package talpiot.mb.magdadmilbat.vision.detectors;
 import com.google.mediapipe.formats.proto.LandmarkProto;
 
 import talpiot.mb.magdadmilbat.vision.Point;
+import talpiot.mb.magdadmilbat.vision.VisionMaster;
 
 /**
  * Simplest implemetation of the IMouth interface. See IMouth for documentation
@@ -10,6 +11,7 @@ import talpiot.mb.magdadmilbat.vision.Point;
 public class SimpleMouth implements IMouth {
 
     private Point cornerRight, cornerLeft, top, bot, faceTop, faceBot;
+    private static final double SCALER = 1000;
 
     @Override
     public void updateMouthData(LandmarkProto.NormalizedLandmarkList face) {
