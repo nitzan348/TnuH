@@ -53,7 +53,7 @@ public interface IMouth {
      */
     default double getArea() {
 
-        return getHeight() * getWidth() / 2;
+        return getHeight() * getWidth() * Math.PI; // Area of ellipse
     }
 
     /**
