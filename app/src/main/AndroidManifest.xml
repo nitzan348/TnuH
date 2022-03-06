@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.MagdadMilbat">
+
+    <!--    <uses-permission android:name="android.permission.CAMERA" />-->
+    <!--
+ Limits app visibility in the Google Play Store to ARCore supported devices
+         (https://developers.google.com/ar/devices).
+    -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera2" />
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="תנו חיוך"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MagdadMilbat">
+        <activity
+            android:name="talpiot.mb.magdadmilbat.ExercisePage"
+            android:exported="true"/>
+        <activity
+            android:name="talpiot.mb.magdadmilbat.HistoryPage"
+            android:exported="false" />
+        <activity
+            android:name="talpiot.mb.magdadmilbat.SettingsPage"
+            android:exported="false" />
+        <activity
+            android:name="talpiot.mb.magdadmilbat.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

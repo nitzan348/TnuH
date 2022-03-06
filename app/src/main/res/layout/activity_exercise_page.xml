@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="talpiot.mb.magdadmilbat.ExercisePage">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+
+        <TextView
+            android:id="@+id/tvRepetition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:text="חזרות"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tvExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="סוג תרגיל"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="60dp"
+            android:background="@drawable/ic_baseline_keyboard_backspace_24" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/exerciseQualDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:elevation="1dp"
+            android:text="tmp"
+            android:textColor="@color/teal_700"
+            android:textSize="70sp" />
+
+        <FrameLayout
+            android:id="@+id/preview_display_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/black">
+            <TextView
+                android:id="@+id/no_camera_access_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:text="@string/no_camera_access" />
+        </FrameLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

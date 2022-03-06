@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="talpiot.mb.magdadmilbat.MainActivity">
+
+    <Button
+        android:id="@+id/btnStartExercise"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="75dp"
+        android:text="התחל תרגיל"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/btnHistory"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="היסטוריה"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/btnSettings"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="הגדרות"
+        android:textSize="30dp" />
+</LinearLayout>
