@@ -3,8 +3,7 @@ package talpiot.mb.magdadmilbat.vision.detectors;
 import com.google.mediapipe.formats.proto.LandmarkProto;
 
 /**
- * Generic mouth object represeting a mouth. How to use:
- * Call
+ * Generic mouth object represeting a mouth
  *
  */
 public interface IMouth {

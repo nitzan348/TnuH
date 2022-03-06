@@ -27,6 +27,8 @@ import talpiot.mb.magdadmilbat.vision.detectors.SimpleMouth;
 /**
  * This class handles all of the vision for the project. See {@link talpiot.mb.magdadmilbat.ExercisePage}
  * for usage example.
+ *
+ * @author Alexey
  */
 public class VisionMaster extends Thread {
     /**

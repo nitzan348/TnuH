@@ -140,7 +140,7 @@ public class Point {
     }
 
     public static boolean isFuzzyEqual(double first, double second) {
-        return isFuzzyEqual(first, second, 1E-6);
+        return isFuzzyEqual( first, second, 1E-6);
     }
 
     public static boolean fuzzyEquals(Point fir, Point sec, double epsilon) {

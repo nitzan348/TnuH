@@ -12,6 +12,10 @@ import android.widget.TextView;
 import com.example.MagdadMilbat.R;
 import java.util.List;
 
+/**
+ *
+ * @author Elia
+ */
 public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
     private Context context;
     private List<TrainingData> data;

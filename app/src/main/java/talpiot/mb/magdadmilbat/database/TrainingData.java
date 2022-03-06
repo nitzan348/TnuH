@@ -1,5 +1,9 @@
 package talpiot.mb.magdadmilbat.database;
 
+/**
+ *
+ * @author Elia
+ */
 public class TrainingData {
     //private Date date;
     private String date;

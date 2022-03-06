@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+/**
+ *
+ * @author Elia
+ */
 public class DatabaseManager extends SQLiteOpenHelper {
 
     public DatabaseManager(Context context) {
