@@ -48,6 +48,11 @@ public interface IMouth {
     double getSymmetryCoef();
 
     /**
+     * @return number representing the success of a kiss
+     */
+    double checkKiss();
+
+    /**
      *
      * @return Get the area of the lips
      */

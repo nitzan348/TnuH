@@ -48,6 +48,11 @@ public class SimpleMouth implements IMouth {
     }
 
     @Override
+    public double checkKiss() {
+        return (getHeight() / getWidth()) * 100; //Success rates for a kiss
+    }
+
+    @Override
     public double getSymmetryCoef() {
         return Math.abs(Point.subtract(top, bot)
                 .rotateToNormalize(Point.subtract(faceTop, faceBot))
@@ -66,6 +71,7 @@ public class SimpleMouth implements IMouth {
                 ", smile=" + getSmileScore() +
                 ", openMouth=" + getBigMouthScore() +
                 ", area=" + getArea() +
+                ", kiss=" + checkKiss() +
                 '}';
     }
 }
