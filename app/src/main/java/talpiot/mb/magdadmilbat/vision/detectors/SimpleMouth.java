@@ -4,6 +4,7 @@ import com.google.mediapipe.formats.proto.LandmarkProto;
 
 import talpiot.mb.magdadmilbat.vision.Point;
 import talpiot.mb.magdadmilbat.vision.VisionMaster;
+
 import java.io.*;
 import java.util.*;
 
@@ -30,10 +31,10 @@ public class SimpleMouth implements IMouth {
         leftCorenerToMiddleTop.add(new Point(face.getLandmark(39)));
         leftCorenerToMiddleTop.add(new Point(face.getLandmark(37)));
 
-        rightCorenerToMiddleTop.add(new Point (face.getLandmark(409)));
-        rightCorenerToMiddleTop.add(new Point (face.getLandmark(270)));
-        rightCorenerToMiddleTop.add(new Point (face.getLandmark(269)));
-        rightCorenerToMiddleTop.add(new Point (face.getLandmark(267)));
+        rightCorenerToMiddleTop.add(new Point(face.getLandmark(409)));
+        rightCorenerToMiddleTop.add(new Point(face.getLandmark(270)));
+        rightCorenerToMiddleTop.add(new Point(face.getLandmark(269)));
+        rightCorenerToMiddleTop.add(new Point(face.getLandmark(267)));
 
         leftCorenerToMiddleBot.add(new Point(face.getLandmark((146))));
         leftCorenerToMiddleBot.add(new Point(face.getLandmark((91))));
@@ -81,22 +82,24 @@ public class SimpleMouth implements IMouth {
     public double getSymmetryCoef() {
         double firstMouthHalf = 0.0, secondMouthHalf = 0.0;
 
-        //Calculates left and right half of mouth symmetry.
-        for(int i = 0; i < 4; i++) {
-            firstMouthHalf += Math.abs(Point.subtract(leftCorenerToMiddleTop.get(i), leftCorenerToMiddleBot.get(i)).getY() / getHeightNormalizer()
-                                + Point.subtract(leftCorenerToMiddleTop.get(i), leftCorenerToMiddleBot.get(i)).getX() / getWidthNormalizer());
+        Point normalizationVector = Point.subtract(faceTop, faceBot);
 
-            secondMouthHalf += Math.abs(Point.subtract(rightCorenerToMiddleTop.get(i), rightCorenerToMiddleTop.get(i)).getY() / getHeightNormalizer()
-                                + Point.subtract(rightCorenerToMiddleTop.get(i), rightCorenerToMiddleBot.get(i)).getX() / getWidthNormalizer());
+        //Calculates left and right half of mouth symmetry.
+        for (int i = 0; i < 4; i++) {
+            firstMouthHalf += Math.abs(
+                    +Point.subtract(leftCorenerToMiddleTop.get(i), leftCorenerToMiddleBot.get(i)).rotateToNormalize(normalizationVector).getX() / getWidthNormalizer());
+
+            secondMouthHalf += Math.abs(
+                    +Point.subtract(rightCorenerToMiddleTop.get(i), rightCorenerToMiddleBot.get(i)).rotateToNormalize(normalizationVector).getX() / getWidthNormalizer());
         }
 
         return Math.abs(Point.subtract(top, bot)
-                .rotateToNormalize(Point.subtract(faceTop, faceBot))
+                .rotateToNormalize(normalizationVector)
                 .getY()) / getHeightNormalizer()
                 + Math.abs(Point.subtract(cornerRight, cornerLeft)
-                .rotateToNormalize(Point.subtract(faceTop, faceBot))
+                .rotateToNormalize(normalizationVector)
                 .getX()) / getWidthNormalizer()
-        //Added them to final result.
+//        //Added them to final result.
                 + firstMouthHalf + secondMouthHalf;
     }
 
