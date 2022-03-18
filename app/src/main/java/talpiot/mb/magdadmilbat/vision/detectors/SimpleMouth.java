@@ -14,6 +14,7 @@ import java.util.*;
 public class SimpleMouth implements IMouth {
 
     private Point cornerRight, cornerLeft, top, bot, faceTop, faceBot;
+    //Added saved points.
     private Vector<Point> rightCorenerToMiddleTop = new Vector<Point>(4);
     private Vector<Point> leftCorenerToMiddleTop = new Vector<Point>(4);
     private Vector<Point> rightCorenerToMiddleBot = new Vector<Point>(4);
@@ -23,6 +24,7 @@ public class SimpleMouth implements IMouth {
     @Override
     public void updateMouthData(LandmarkProto.NormalizedLandmarkList face) {
 
+        //Points needed to calculate mouth symmetry,
         leftCorenerToMiddleTop.add(new Point(face.getLandmark(185)));
         leftCorenerToMiddleTop.add(new Point(face.getLandmark(40)));
         leftCorenerToMiddleTop.add(new Point(face.getLandmark(39)));
@@ -77,12 +79,25 @@ public class SimpleMouth implements IMouth {
 
     @Override
     public double getSymmetryCoef() {
+        double firstMouthHalf = 0.0, secondMouthHalf = 0.0;
+
+        //Calculates left and right half of mouth symmetry.
+        for(int i = 0; i < 4; i++) {
+            firstMouthHalf += Math.abs(Point.subtract(leftCorenerToMiddleTop.get(i), leftCorenerToMiddleBot.get(i)).getY() / getHeightNormalizer()
+                                + Point.subtract(leftCorenerToMiddleTop.get(i), leftCorenerToMiddleBot.get(i)).getX() / getWidthNormalizer());
+
+            secondMouthHalf += Math.abs(Point.subtract(rightCorenerToMiddleTop.get(i), rightCorenerToMiddleTop.get(i)).getY() / getHeightNormalizer()
+                                + Point.subtract(rightCorenerToMiddleTop.get(i), rightCorenerToMiddleBot.get(i)).getX() / getWidthNormalizer());
+        }
+
         return Math.abs(Point.subtract(top, bot)
                 .rotateToNormalize(Point.subtract(faceTop, faceBot))
                 .getY()) / getHeightNormalizer()
                 + Math.abs(Point.subtract(cornerRight, cornerLeft)
                 .rotateToNormalize(Point.subtract(faceTop, faceBot))
-                .getX()) / getWidthNormalizer();
+                .getX()) / getWidthNormalizer()
+        //Added them to final result.
+                + firstMouthHalf + secondMouthHalf;
     }
 
     @Override
