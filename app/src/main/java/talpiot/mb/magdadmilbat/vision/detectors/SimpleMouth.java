@@ -3,7 +3,6 @@ package talpiot.mb.magdadmilbat.vision.detectors;
 import com.google.mediapipe.formats.proto.LandmarkProto;
 
 import talpiot.mb.magdadmilbat.vision.Point;
-import talpiot.mb.magdadmilbat.vision.VisionMaster;
 
 /**
  * Simplest implemetation of the IMouth interface. See IMouth for documentation
@@ -48,11 +47,6 @@ public class SimpleMouth implements IMouth {
     }
 
     @Override
-    public double checkKiss() {
-        return (getHeight() / getWidth()) * 100; //Success rates for a kiss
-    }
-
-    @Override
     public double getSymmetryCoef() {
         return Math.abs(Point.subtract(top, bot)
                 .rotateToNormalize(Point.subtract(faceTop, faceBot))
@@ -71,7 +65,7 @@ public class SimpleMouth implements IMouth {
                 ", smile=" + getSmileScore() +
                 ", openMouth=" + getBigMouthScore() +
                 ", area=" + getArea() +
-                ", kiss=" + checkKiss() +
+                ", kiss=" + getHeightWidthRatio() +
                 '}';
     }
 }

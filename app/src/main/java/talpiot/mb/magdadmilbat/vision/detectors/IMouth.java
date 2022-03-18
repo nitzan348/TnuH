@@ -47,10 +47,6 @@ public interface IMouth {
      */
     double getSymmetryCoef();
 
-    /**
-     * @return number representing the success of a kiss
-     */
-    double checkKiss();
 
     /**
      *
@@ -76,6 +72,21 @@ public interface IMouth {
      */
     default double getBigMouthScore() {
         return enforceSymmetry(getArea() / (getHeightNormalizer() * getWidthNormalizer()));
+    }
+
+    /**
+     * @return ration of height by width of mouth
+     */
+    default double getHeightWidthRatio() {
+        return (getHeight() / getWidth()) * 100; //Success rates for a kiss
+    }
+
+    /**
+     *
+     * @return number representing the success of a kiss
+     */
+    default double getKissScore() {
+        return enforceSymmetry(getHeightWidthRatio());
     }
 
     /**
