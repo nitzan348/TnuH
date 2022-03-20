@@ -49,7 +49,12 @@ public class SimpleMouth implements IMouth {
 
     @Override
     public double checkKiss() {
-        return (getHeight() / getWidth()) * 100; //Success rates for a kiss
+        double res = enforceSymmetry((getHeight() / getWidth()) * 100); //Success rates for a
+        if(getHeight() > getWidth() + 10)
+            return res - 30;
+        if(getHeight() < getWidth() / 2)
+            return res;
+        return res + 50;
     }
 
     @Override
