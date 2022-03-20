@@ -12,6 +12,8 @@ public class SimpleMouth implements IMouth {
 
     private Point cornerRight, cornerLeft, top, bot, faceTop, faceBot;
     private static final double SCALER = 1000;
+    private static final double MAX_SCORE  = 100;
+
 
     @Override
     public void updateMouthData(LandmarkProto.NormalizedLandmarkList face) {
@@ -50,10 +52,12 @@ public class SimpleMouth implements IMouth {
     @Override
     public double checkKiss() {
         double res = enforceSymmetry((getHeight() / getWidth()) * 100); //Success rates for a
-        if(getHeight() > getWidth() + 10)
-            return res - 30;
-        if(getHeight() < getWidth() / 2)
+        if(getHeight() > getWidth() + 10) //If the mouth is open unsymmetrical to the length of the mouth
+            return res - 30; //Normalization result
+        if(getHeight() < getWidth() / 2) //If the mouth is open unsymmetrical to the width of the mouth
             return res;
+        if(res > MAX_SCORE)
+            return MAX_SCORE;
         return res + 50;
     }
 
