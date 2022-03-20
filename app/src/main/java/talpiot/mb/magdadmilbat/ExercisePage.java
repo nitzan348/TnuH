@@ -87,16 +87,10 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                         }
                         if (vision.getCurrentFace() != null) {
                             IMouth mouth = vision.getCurrentFace().getMouth();
-//                            runOnUiThread(() -> txt.setText(
-//                                    String.format(":O %o, :) %o",
-//                                            (int) (1000 * mouth.getBigMouthScore()),
-//                                            (int) (1000 * mouth.getSmileScore()))
-//                            ));
-
-                            double value = mouth.getSymmetryCoef();
-
                             runOnUiThread(() -> txt.setText(
-                                    Double.toString(value).substring(0, 5)
+                                    String.format(":O %o, :) %o",
+                                            (int) (1000 * mouth.getBigMouthScore()),
+                                            (int) (1000 * mouth.getSmileScore()))
                             ));
 
                             Log.i(TAG, mouth.toString());
