@@ -10,12 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
 
+import java.util.ArrayList;
+
+import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.database.TrainingDataAdapter;
 
 public class HistoryPage extends AppCompatActivity implements View.OnClickListener {
     Button btnBack;
     ListView lvHistory;
-    TrainingDataAdapter detailsAdapter;
+    ArrayList<TrainingData> trainingData;
+    TrainingDataAdapter trainingDataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +27,11 @@ public class HistoryPage extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_history_page);
 
         btnBack = (Button)findViewById(R.id.btnBack);
-        detailsAdapter = new TrainingDataAdapter(this);
+        trainingData = new ArrayList<TrainingData>();
+        trainingDataAdapter = new TrainingDataAdapter(this, trainingData);
         lvHistory = (ListView)findViewById(R.id.lvHistory);
 
-        lvHistory.setAdapter(detailsAdapter);
+        lvHistory.setAdapter(trainingDataAdapter);
         btnBack.setOnClickListener(this);
     }
 

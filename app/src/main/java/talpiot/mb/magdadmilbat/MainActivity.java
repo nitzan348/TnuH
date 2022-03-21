@@ -1,17 +1,16 @@
 package talpiot.mb.magdadmilbat;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.MagdadMilbat.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnStartExercise, btnHistory, btnSettings;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view == btnStartExercise)
         {
-            Intent intent = new Intent(this, ExercisePage.class);
+            Intent intent = new Intent(this, ExrChoiceScreen.class);
             startActivity(intent);
         }
         else if (view == btnHistory)
@@ -41,11 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (view == btnSettings)
         {
-            Intent intent = new Intent(this, SettingsPage.class);
+            Intent intent = new Intent(this, SettingsChoiceScreen.class);
             startActivity(intent);
         }
     }
-
-
-
 }
