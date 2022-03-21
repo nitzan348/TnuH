@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="talpiot.mb.magdadmilbat.ExercisePage">
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="60dp"
-        android:background="@drawable/ic_baseline_keyboard_backspace_24" />
-
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,53 +11,39 @@
 
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:textSize="30dp"
+            android:text = "חזרות"
             android:id="@+id/tvRepetition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:text="חזרות"
-            android:textSize="30sp"
-            android:visibility="gone" />
+            />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text = "סוג תרגיל"
             android:id="@+id/tvExercise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="סוג תרגיל"
-            android:textSize="30sp"
-            android:visibility="gone" />
+            />
 
-        <TextView
-            android:id="@+id/exerciseQualDisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:elevation="1dp"
-            android:text="grade"
-            android:textColor="@color/teal_700"
-            android:textSize="40sp" />
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/ic_baseline_keyboard_backspace_24"
+            android:id="@+id/btnBack"
+            />
+
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <FrameLayout
-            android:id="@+id/preview_display_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@color/black">
-
-            <TextView
-                android:id="@+id/no_camera_access_view"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center"
-                android:text="@string/no_camera_access" />
-        </FrameLayout>
-    </RelativeLayout>
-
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:background="@color/black"
+        />
 
 </LinearLayout>

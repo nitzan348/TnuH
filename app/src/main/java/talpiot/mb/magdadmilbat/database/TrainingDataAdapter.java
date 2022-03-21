@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.MagdadMilbat.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
     private List<TrainingData> data;
     private DatabaseManager manager;
 
-    public TrainingDataAdapter(Context context) {
+    public TrainingDataAdapter(Context context, ArrayList<TrainingData> details) {
         super(context,
                 0,
                 0,
