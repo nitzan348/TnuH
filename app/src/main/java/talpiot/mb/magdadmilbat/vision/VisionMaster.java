@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import talpiot.mb.magdadmilbat.database.DatabaseManager;
 import talpiot.mb.magdadmilbat.database.TrainingData;
@@ -56,6 +57,24 @@ public class VisionMaster extends Thread {
     public static final int WIDTH = 960, HEIGHT = 720;
 
     private DecomposedFace currentFace;
+    private Exercise currentExr;
+
+    public enum Exercise {
+
+        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore()),
+        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore());
+
+        private final Supplier<Double> valSup;
+
+        private Exercise(Supplier<Double> valueSupplier) {
+            this.valSup = valueSupplier;
+        }
+
+        public double get() {
+            return valSup.get();
+        }
+
+    }
 
     private VisionMaster() {
     }
@@ -79,6 +98,13 @@ public class VisionMaster extends Thread {
     public DecomposedFace getCurrentFace() {
 
         return currentFace;
+    }
+
+    public double getScore() {
+        if (currentExr != null) {
+            return currentExr.get();
+        }
+        return 0;
     }
 
     public static class DecomposedFace {
@@ -118,6 +144,10 @@ public class VisionMaster extends Thread {
                 faceMesh.getGlContext(),
                 CameraInput.CameraFacing.FRONT,
                 WIDTH, HEIGHT);
+    }
+
+    public void setCurrentExr(Exercise currentExr) {
+        this.currentExr = currentExr;
     }
 
     /**

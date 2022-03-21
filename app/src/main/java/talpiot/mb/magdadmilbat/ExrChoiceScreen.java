@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
 
+import talpiot.mb.magdadmilbat.vision.VisionMaster;
+
 public class ExrChoiceScreen extends AppCompatActivity implements View.OnClickListener {
     Button btnBack, btnCheeks, btnKiss, btnOpenMouth, btnSmile;
 
@@ -41,6 +43,7 @@ public class ExrChoiceScreen extends AppCompatActivity implements View.OnClickLi
             Intent intent = new Intent(this, ExercisePage.class);
             intent.putExtra("exercise", "חיוך");
             intent.putExtra("exercise sp", "settings smile");
+            VisionMaster.getInstance().setCurrentExr(VisionMaster.Exercise.SMILE);
             startActivity(intent);
         }
         else if (view == btnOpenMouth)
@@ -48,6 +51,7 @@ public class ExrChoiceScreen extends AppCompatActivity implements View.OnClickLi
             Intent intent = new Intent(this, ExercisePage.class);
             intent.putExtra("exercise", "פה גדול");
             intent.putExtra("exercise sp", "settings open mouth");
+            VisionMaster.getInstance().setCurrentExr(VisionMaster.Exercise.BIG_MOUTH);
             startActivity(intent);
         }
         else if (view == btnKiss)
