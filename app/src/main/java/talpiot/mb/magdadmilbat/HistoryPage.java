@@ -12,13 +12,13 @@ import com.example.MagdadMilbat.R;
 
 import java.util.ArrayList;
 
+import talpiot.mb.magdadmilbat.database.DatabaseManager;
 import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.database.TrainingDataAdapter;
 
 public class HistoryPage extends AppCompatActivity implements View.OnClickListener {
     Button btnBack;
     ListView lvHistory;
-    ArrayList<TrainingData> trainingData;
     TrainingDataAdapter trainingDataAdapter;
 
     @Override
@@ -27,8 +27,7 @@ public class HistoryPage extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_history_page);
 
         btnBack = (Button)findViewById(R.id.btnBack);
-        trainingData = new ArrayList<TrainingData>();
-        trainingDataAdapter = new TrainingDataAdapter(this, trainingData);
+        trainingDataAdapter = new TrainingDataAdapter(this, DatabaseManager.getAllTraining());
         lvHistory = (ListView)findViewById(R.id.lvHistory);
 
         lvHistory.setAdapter(trainingDataAdapter);
