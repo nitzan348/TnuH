@@ -23,8 +23,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:text="היסטוריה"
-        android:textSize="30dp"
-        android:visibility="gone" />
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/btnSettings"
@@ -33,6 +32,5 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:text="הגדרות"
-        android:textSize="30dp"
-        android:visibility="gone" />
+        android:textSize="30dp" />
 </LinearLayout>
