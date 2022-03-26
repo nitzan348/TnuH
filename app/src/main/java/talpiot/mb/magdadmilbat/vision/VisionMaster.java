@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Vector;
 import java.util.function.Supplier;
 
 import talpiot.mb.magdadmilbat.database.DatabaseManager;
@@ -59,6 +60,21 @@ public class VisionMaster extends Thread {
     private DecomposedFace currentFace;
     private Exercise currentExr;
 
+    /**
+    * saves all past faces to calculate score and improvment.
+    * */
+    private Vector<LandmarkProto.NormalizedLandmarkList> pastMovement= new Vector<LandmarkProto.NormalizedLandmarkList>();
+
+    /**
+     * flags to define current face state during practice.
+     * counter to define how many rehearsals user made.
+     * */
+    private boolean NormalFace = false;
+    private boolean InPractice = false;
+    private boolean restingFace = false;
+    static int amountOfRehearsals = 0;
+
+
     public enum Exercise {
 
         SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore()),
@@ -95,8 +111,11 @@ public class VisionMaster extends Thread {
         return instance;
     }
 
-    public DecomposedFace getCurrentFace() {
+    public Vector<LandmarkProto.NormalizedLandmarkList> getPastFaces() {
+        return pastMovement;
+    }
 
+    public DecomposedFace getCurrentFace() {
         return currentFace;
     }
 
@@ -153,6 +172,40 @@ public class VisionMaster extends Thread {
     /**
      * Set's up the FaceMesh object for use
      */
+
+    /**
+     * function deals with all score system -> three flags as class flags
+     * that define what state the user is at currently, deals with score comparing
+     * and checks when user's face is resting.
+     * */
+    public void checkForPracticeScore(LandmarkProto.NormalizedLandmarkList face) {
+        double score = 0.0;
+
+        //adds current movement to past faces.
+        this.pastMovement.add(face);
+
+        if (pastMovement.get(0) == face) { //checks if current face is similar to first captured.
+            this.NormalFace = true;
+            this.restingFace = false;
+            this.InPractice = false;
+
+        }
+        else {
+            score = this.getScore();
+            if(score >= 10) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST. (level of difficulty).
+                amountOfRehearsals++;
+                this.NormalFace = false;
+                this.restingFace = true;
+                this.InPractice = false;
+            }
+            else {
+                this.NormalFace = false;
+                this.restingFace = false;
+                this.InPractice = true;
+            }
+        }
+    }
+
     public void setupMeshRecognizer(Context context) {
         FaceMeshOptions faceMeshOptions =
                 FaceMeshOptions.builder()
@@ -171,6 +224,7 @@ public class VisionMaster extends Thread {
         // Everytime a face mesh is detected the given function is called
         faceMesh.setResultListener(
                 faceMeshResult -> {
+                    this.NormalFace = true;
                     if (faceMeshResult.multiFaceLandmarks().size() > 0) {
 
                         // The next line gets a "Face" object from the face list
@@ -187,6 +241,8 @@ public class VisionMaster extends Thread {
                         // Draw image
                         imageView.setFaceMeshResult(faceMeshResult);
                         uiUpdater.post(() -> imageView.update());
+
+                        checkForPracticeScore(face);
                     }
                 });
     }
