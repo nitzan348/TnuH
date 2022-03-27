@@ -73,6 +73,7 @@ public class VisionMaster extends Thread {
     private boolean InPractice = false;
     private boolean restingFace = false;
     static int amountOfRehearsals = 0;
+    private double rehearsalScoreToBeat = 0.0;
 
 
     public enum Exercise {
@@ -179,7 +180,6 @@ public class VisionMaster extends Thread {
      * and checks when user's face is resting.
      * */
     public void checkForPracticeScore(LandmarkProto.NormalizedLandmarkList face) {
-        double score = 0.0;
 
         //adds current movement to past faces.
         this.pastMovement.add(face);
@@ -191,8 +191,7 @@ public class VisionMaster extends Thread {
 
         }
         else {
-            score = this.getScore();
-            if(score >= 10) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST. (level of difficulty).
+            if (this.getScore() >= rehearsalScoreToBeat) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty).
                 amountOfRehearsals++;
                 this.NormalFace = false;
                 this.restingFace = true;
