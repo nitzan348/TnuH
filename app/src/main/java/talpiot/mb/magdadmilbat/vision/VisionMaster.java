@@ -78,19 +78,37 @@ public class VisionMaster extends Thread {
 
     public enum Exercise {
 
-        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore()),
-        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore());
+        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(), 10, 100),
+        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(), 10, 100);
 
         private final Supplier<Double> valSup;
+        private double restingMaximumScore, actingMinimumScore;
 
-        private Exercise(Supplier<Double> valueSupplier) {
+        Exercise(Supplier<Double> valueSupplier, double minScore, double maxScore) {
             this.valSup = valueSupplier;
+            setActingMinimumScore(minScore);
+            setRestingMaximumScore(maxScore);
         }
 
         public double get() {
             return valSup.get();
         }
 
+        public double getRestingMaximumScore() {
+            return restingMaximumScore;
+        }
+
+        public void setRestingMaximumScore(double restingMaximumScore) {
+            this.restingMaximumScore = restingMaximumScore;
+        }
+
+        public double getActingMinimumScore() {
+            return actingMinimumScore;
+        }
+
+        public void setActingMinimumScore(double actingMinimumScore) {
+            this.actingMinimumScore = actingMinimumScore;
+        }
     }
 
     private VisionMaster() {
@@ -191,7 +209,7 @@ public class VisionMaster extends Thread {
 
         }
         else {
-            if (this.getScore() >= rehearsalScoreToBeat) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty).
+            if (this.getScore() >= currentExr.getActingMinimumScore()) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty).
                 amountOfRehearsals++;
                 this.NormalFace = false;
                 this.restingFace = true;
