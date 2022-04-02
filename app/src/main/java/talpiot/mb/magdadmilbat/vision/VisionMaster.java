@@ -61,17 +61,10 @@ public class VisionMaster extends Thread {
     private Exercise currentExr;
 
     /**
-    * saves all past faces to calculate score and improvment.
-    * */
-    private Vector<LandmarkProto.NormalizedLandmarkList> pastMovement= new Vector<LandmarkProto.NormalizedLandmarkList>();
-
-    /**
      * flags to define current face state during practice.
      * counter to define how many rehearsals user made.
      * */
-    private boolean InPractice = false;
     private boolean restingFace = false;
-    static int amountOfRehearsals = 0;
     private double rehearsalScoreToBeat = 0.0;
     private double restingFaceScore = 0.0;
 
@@ -129,9 +122,6 @@ public class VisionMaster extends Thread {
         return instance;
     }
 
-    public Vector<LandmarkProto.NormalizedLandmarkList> getPastFaces() {
-        return pastMovement;
-    }
 
     public DecomposedFace getCurrentFace() {
         return currentFace;
@@ -196,25 +186,16 @@ public class VisionMaster extends Thread {
      * that define what state the user is at currently, deals with score comparing
      * and checks when user's face is resting.
      * */
-    public void checkForPracticeScore(LandmarkProto.NormalizedLandmarkList face) {
+    public boolean checkForPracticeScore() {
 
-        //adds current movement to past faces.
-        this.pastMovement.add(face);
-
-        if (this.getScore() >= restingFaceScore && this.getScore() <= rehearsalScoreToBeat) { //checks if current face is similar to first captured.
-            this.InPractice = true;
-
+        if (this.getScore() >= currentExr.actingMinimumScore && this.restingFace) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty)
+            this.restingFace = false;
+            return true;
         }
-        else {
-            if (this.getScore() >= rehearsalScoreToBeat && this.InPractice) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty).
-                amountOfRehearsals++;
-                this.InPractice = false;
-            }
-            else if (this.getScore() <= restingFaceScore){
-                this.restingFace = true;
-                this.InPractice = false;
-            }
+        if (this.getScore() <= currentExr.restingMaximumScore){
+            this.restingFace = true;
         }
+        return false;
     }
 
     public void setupMeshRecognizer(Context context) {
@@ -252,7 +233,7 @@ public class VisionMaster extends Thread {
                         imageView.setFaceMeshResult(faceMeshResult);
                         uiUpdater.post(() -> imageView.update());
 
-                        checkForPracticeScore(face);
+                        checkForPracticeScore();
                     }
                 });
     }
