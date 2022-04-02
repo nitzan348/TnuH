@@ -69,12 +69,11 @@ public class VisionMaster extends Thread {
      * flags to define current face state during practice.
      * counter to define how many rehearsals user made.
      * */
-    private boolean NormalFace = false;
     private boolean InPractice = false;
     private boolean restingFace = false;
     static int amountOfRehearsals = 0;
     private double rehearsalScoreToBeat = 0.0;
-
+    private double restingFaceScore = 0.0;
 
     public enum Exercise {
 
@@ -202,23 +201,18 @@ public class VisionMaster extends Thread {
         //adds current movement to past faces.
         this.pastMovement.add(face);
 
-        if (pastMovement.get(0) == face) { //checks if current face is similar to first captured.
-            this.NormalFace = true;
-            this.restingFace = false;
-            this.InPractice = false;
+        if (this.getScore() >= restingFaceScore && this.getScore() <= rehearsalScoreToBeat) { //checks if current face is similar to first captured.
+            this.InPractice = true;
 
         }
         else {
-            if (this.getScore() >= currentExr.getActingMinimumScore()) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty).
+            if (this.getScore() >= rehearsalScoreToBeat && this.InPractice) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty).
                 amountOfRehearsals++;
-                this.NormalFace = false;
-                this.restingFace = true;
                 this.InPractice = false;
             }
-            else {
-                this.NormalFace = false;
-                this.restingFace = false;
-                this.InPractice = true;
+            else if (this.getScore() <= restingFaceScore){
+                this.restingFace = true;
+                this.InPractice = false;
             }
         }
     }
@@ -241,7 +235,6 @@ public class VisionMaster extends Thread {
         // Everytime a face mesh is detected the given function is called
         faceMesh.setResultListener(
                 faceMeshResult -> {
-                    this.NormalFace = true;
                     if (faceMeshResult.multiFaceLandmarks().size() > 0) {
 
                         // The next line gets a "Face" object from the face list
