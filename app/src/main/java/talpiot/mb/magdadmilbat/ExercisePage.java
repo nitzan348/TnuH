@@ -89,8 +89,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                             IMouth mouth = vision.getCurrentFace().getMouth();
 
                             runOnUiThread(() -> txt.setText(
-                                    String.format("Score: %o",
-                                            (int) (1000 * vision.getScore()))
+                                    String.format("Score: %f",
+                                            mouth.getSymmetryCoef())
                             ));
 
                             Log.i(TAG, mouth.toString());

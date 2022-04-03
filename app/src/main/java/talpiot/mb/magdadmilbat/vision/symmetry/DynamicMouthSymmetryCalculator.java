@@ -16,8 +16,8 @@ public class DynamicMouthSymmetryCalculator {
         pointPairList = new ArrayList<>();
 
 
-        pointPairList.add(new PointPair(face, 27, 267));
-        pointPairList.add(new PointPair(face, 22, 269));
+        pointPairList.add(new PointPair(face, 37, 267));
+        pointPairList.add(new PointPair(face, 39, 269));
         pointPairList.add(new PointPair(face, 40, 270));
         pointPairList.add(new PointPair(face, 41, 271));
 
