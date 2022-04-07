@@ -50,7 +50,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
      * This method gets a cursor that holds a record (row) from the training table
      * and creates for us a training object according to that record.
      **/
-    private TrainingData getTraining(Cursor cursor) {
+    private static TrainingData getTraining(Cursor cursor) {
         int dateI = cursor.getColumnIndex("date");
         int timeI = cursor.getColumnIndex("time");
         int durationI = cursor.getColumnIndex("duration");

@@ -20,14 +20,16 @@ public class HistoryPage extends AppCompatActivity implements View.OnClickListen
     Button btnBack;
     ListView lvHistory;
     TrainingDataAdapter trainingDataAdapter;
+    DatabaseManager historyManger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_page);
 
+        historyManger = new DatabaseManager(this);
         btnBack = (Button)findViewById(R.id.btnBack);
-        trainingDataAdapter = new TrainingDataAdapter(this, DatabaseManager.getAllTraining());
+        trainingDataAdapter = new TrainingDataAdapter(this, historyManger.getAllTraining());
         lvHistory = (ListView)findViewById(R.id.lvHistory);
 
         lvHistory.setAdapter(trainingDataAdapter);
