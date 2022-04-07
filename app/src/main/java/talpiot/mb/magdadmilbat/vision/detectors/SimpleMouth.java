@@ -114,4 +114,20 @@ public class SimpleMouth implements IMouth {
                 ", kiss=" + getHeightWidthRatio() +
                 '}';
     }
+
+    public Point getCornerRight() {
+        return cornerRight;
+    }
+
+    public Point getCornerLeft() {
+        return cornerLeft;
+    }
+
+    public Point getTop() {
+        return top;
+    }
+
+    public Point getBot() {
+        return bot;
+    }
 }
