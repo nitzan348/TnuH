@@ -35,6 +35,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    implementation 'com.quickbirdstudios:opencv:3.4.1'
+
     // MediaPipe solution-core is the foundation of any MediaPipe Solutions.
     implementation 'com.google.mediapipe:solution-core:latest.release'
     // Optional: MediaPipe Face Detection Solution.
