@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
 
+import org.opencv.android.OpenCVLoader;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnStartExercise, btnHistory, btnSettings;
 
@@ -17,9 +19,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnStartExercise = (Button)findViewById(R.id.btnStartExercise);
-        btnHistory = (Button)findViewById(R.id.btnHistory);
-        btnSettings = (Button)findViewById(R.id.btnSettings);
+        OpenCVLoader.initDebug();
+
+        btnStartExercise = (Button) findViewById(R.id.btnStartExercise);
+        btnHistory = (Button) findViewById(R.id.btnHistory);
+        btnSettings = (Button) findViewById(R.id.btnSettings);
 
         btnStartExercise.setOnClickListener(this);
         btnHistory.setOnClickListener(this);
@@ -28,18 +32,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if (view == btnStartExercise)
-        {
+        if (view == btnStartExercise) {
             Intent intent = new Intent(this, ExrChoiceScreen.class);
             startActivity(intent);
-        }
-        else if (view == btnHistory)
-        {
+        } else if (view == btnHistory) {
             Intent intent = new Intent(this, HistoryPage.class);
             startActivity(intent);
-        }
-        else if (view == btnSettings)
-        {
+        } else if (view == btnSettings) {
             Intent intent = new Intent(this, SettingsChoiceScreen.class);
             startActivity(intent);
         }
