@@ -64,6 +64,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         exerciseName = getIntent().getStringExtra("exercise");
         sp = getSharedPreferences(getIntent().getStringExtra("exercise sp"), 0);
         tvRepetition.setText(sp.getString("repetition", "1"));
+        dbManager = new DatabaseManager(this);
 
         // I'm pretty sure only one of those lines is needed, but better safe than sorry
         PermissionHelper.checkAndRequestCameraPermissions(this);
@@ -73,7 +74,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         vision.attachToContext(this);
         vision.attachFrame(findViewById(R.id.preview_display_layout));
 
-        dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         now = LocalDateTime.now();
     }
 
@@ -152,15 +153,16 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     public TrainingData getCurrentTraining()
     {
         long millis = Duration.between(start, end).toMillis();
-        String[] datetime = dtf.format(now).split("", 2);
-        TrainingData trainingData = new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis));
-        return trainingData;
+        String[] datetime = dtf.format(now).split(" ", 2);
+        return new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis));
     }
 
     @SuppressLint("DefaultLocale")
     public String convertDurationTime(long millis)
     {
         long seconds = millis / 1000;
-        return String.format("%d:%d", seconds / 60, seconds % 60);
+        if (seconds % 60 < 10)
+            return String.format("'%d:0%d'", seconds / 60, seconds % 60);
+        return String.format("'%d:%d'", seconds / 60, seconds % 60);
     }
 }

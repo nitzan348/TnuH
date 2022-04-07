@@ -41,11 +41,13 @@ public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
         TextView tvExercise = (TextView) view.findViewById(R.id.tvExercise);
         TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
         TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
+        TextView tvDuration = (TextView) view.findViewById(R.id.tvDuration);
 
         TrainingData temp = data.get(position);
-        tvExercise.setText(temp.toString());
+        tvExercise.setText(temp.getExerciseDescription());
         tvDate.setText(temp.getDate());
         tvTime.setText(temp.getTime());
+        tvDuration.setText(temp.getDuration());
 
         return view;
     }

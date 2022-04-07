@@ -39,7 +39,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
      * This function adds the value of the training it receives to the training table
      **/
     public void addTraining(TrainingData training) {
-        String sql = "insert into Training(date, time, exerciseDescription, trainingQuality, duration) " +
+        String sql = "insert into Training(date, time, exerciseDescription, duration) " +
                 "values ('" + training.getDate() + "','" + training.getTime() + "','" + training.getExerciseDescription() + "'," + training.getDuration() + ")";
         SQLiteDatabase sqLiteDatabase = getWritableDatabase(); // Open connection.
         sqLiteDatabase.execSQL(sql);
@@ -81,4 +81,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         sqLiteDatabase.close(); // Close connection.
         return trainingArrayList;
     }
+
+
 }

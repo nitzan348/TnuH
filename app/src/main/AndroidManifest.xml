@@ -29,6 +29,9 @@
             android:name="talpiot.mb.magdadmilbat.SettingsPage"
             android:exported="false" />
         <activity
+            android:name="talpiot.mb.magdadmilbat.ExrChoiceScreen"
+            android:exported="true"/>
+        <activity
             android:name="talpiot.mb.magdadmilbat.MainActivity"
             android:exported="true">
             <intent-filter>
