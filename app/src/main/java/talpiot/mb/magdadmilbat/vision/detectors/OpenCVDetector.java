@@ -19,16 +19,17 @@ import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Scalar;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 
 public class OpenCVDetector {
-    final static int MAX_H = 100;
+    final static int MAX_H = 10;
     final static int MIN_H = 0;
 
-    final static int MAX_S = 100;
-    final static int MIN_S = 0;
+    final static int MAX_S = 27 + 10;
+    final static int MIN_S = 27 - 10;
 
-    final static int MAX_V = 255;
-    final static int MIN_V = 100;
+    final static int MAX_V = 99 + 30;
+    final static int MIN_V = 99 - 30;
 
 
     public Mat getCroppedPicture(Mat cropImage, SimpleMouth face) {
