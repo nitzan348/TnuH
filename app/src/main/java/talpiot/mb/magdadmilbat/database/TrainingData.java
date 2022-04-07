@@ -9,14 +9,12 @@ public class TrainingData {
     private String date;
     private String time; // Training start time
     private String exerciseDescription;
-    private int trainingQuality;
-    private double duration;//duration that the Training take
+    private String duration; // duration that the Training take
 
-    public TrainingData(String date, String time, String exerciseDescription, int trainingQuality, double duration) {
+    public TrainingData(String date, String time, String exerciseDescription, String duration) {
         this.date = date;
         this.time = time;
         this.exerciseDescription = exerciseDescription;
-        this.trainingQuality = trainingQuality;
         this.duration = duration;
     }
 
@@ -32,7 +30,7 @@ public class TrainingData {
         return time;
     }
 
-    public double getDuration() {
+    public String getDuration() {
         return this.duration;
     }
 
@@ -48,21 +46,12 @@ public class TrainingData {
         this.exerciseDescription = exerciseDescription;
     }
 
-    public int getTrainingQuality() {
-        return trainingQuality;
-    }
-
-    public void setWorkmanshipQuality(int trainingQuality) {
-        this.trainingQuality = trainingQuality;
-    }
-
     @Override
     public String toString() {
         return "Training{" +
                 "Date='" + date + '\'' +
                 ", Time='" + time + '\'' +
                 ", Exercise Description: '" + exerciseDescription + '\'' +
-                ", Training Quality: " + trainingQuality + '\'' +
                 ", duration:" + duration +
                 '}';
     }
