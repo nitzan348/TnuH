@@ -20,20 +20,30 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+
 import androidx.appcompat.widget.AppCompatImageView;
+
 import android.util.Size;
 
 import com.google.mediapipe.formats.proto.LandmarkProto.NormalizedLandmark;
 import com.google.mediapipe.solutions.facemesh.FaceMeshConnections;
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
+
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 import java.util.List;
+
+import talpiot.mb.magdadmilbat.vision.detectors.OpenCVDetector;
 
 /**
  * An ImageView implementation for displaying {@link FaceMeshResult}.
- *
+ * <p>
  * Copied and modified from:
  * https://github.com/google/mediapipe/tree/master/mediapipe/examples/android/solutions/facemesh
- *
  */
 public class FaceMeshResultImageView extends AppCompatImageView {
     private static final String TAG = "FaceMeshResultImageView";
@@ -51,7 +61,7 @@ public class FaceMeshResultImageView extends AppCompatImageView {
      * Sets a {@link FaceMeshResult} to render.
      *
      * @param result a {@link FaceMeshResult} object that contains the solution outputs and the input
-     *     {@link Bitmap}.
+     *               {@link Bitmap}.
      */
     public void setFaceMeshResult(FaceMeshResult result) {
         if (result == null) {
@@ -60,12 +70,25 @@ public class FaceMeshResultImageView extends AppCompatImageView {
         Bitmap bmInput = result.inputBitmap();
 
         Matrix matrix = new Matrix();
-        matrix.postScale(1, -1, bmInput.getWidth()/2.0f, bmInput.getHeight()/2.0f);
+        matrix.postScale(1, -1, bmInput.getWidth() / 2.0f, bmInput.getHeight() / 2.0f);
         bmInput = Bitmap.createBitmap(bmInput, 0, 0, bmInput.getWidth(), bmInput.getHeight(), matrix, true);
 
         int width = bmInput.getWidth();
         int height = bmInput.getHeight();
         latest = Bitmap.createBitmap(width, height, bmInput.getConfig());
+
+        // test
+        OpenCVDetector testing = new OpenCVDetector();
+        Mat tst = testing.thresholdTongue(testing.faceMashToCVFrame(result));
+        Bitmap bmp = null;
+        Mat tmp = new Mat(height, width, CvType.CV_8U, new Scalar(4));
+        //Imgproc.cvtColor(seedsImage, tmp, Imgproc.COLOR_RGB2BGRA);
+        Imgproc.cvtColor(tst, tmp, Imgproc.COLOR_GRAY2RGBA, 4);
+        bmp = Bitmap.createBitmap(tmp.cols(), tmp.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(tmp, bmp);
+        latest = bmp;
+        bmInput = bmp;
+        // --------------------
 
         Canvas canvas = new Canvas(latest);
         Size imageSize = new Size(width, height);
@@ -81,7 +104,9 @@ public class FaceMeshResultImageView extends AppCompatImageView {
         }
     }
 
-    /** Updates the image view with the latest {@link FaceMeshResult}. */
+    /**
+     * Updates the image view with the latest {@link FaceMeshResult}.
+     */
     public void update() {
         postInvalidate();
         if (latest != null) {

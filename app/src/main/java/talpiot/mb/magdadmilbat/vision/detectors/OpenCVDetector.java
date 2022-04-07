@@ -58,9 +58,6 @@ public class OpenCVDetector {
 
         Core.inRange(dstHSV, new Scalar(MIN_H, MIN_S, MIN_V), new Scalar(MAX_H, MAX_S, MAX_V), dst);
 
-        //cropped image hsv to rgb
-        Imgproc.cvtColor(dst, croppedImage, Imgproc.COLOR_HSV2BGR);
-
         return croppedImage;
     }
 
