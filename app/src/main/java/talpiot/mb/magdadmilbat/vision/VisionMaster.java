@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Vector;
 import java.util.function.Supplier;
 
 import talpiot.mb.magdadmilbat.database.DatabaseManager;
@@ -67,6 +66,7 @@ public class VisionMaster extends Thread {
     private boolean restingFace = false;
     private double rehearsalScoreToBeat = 0.0;
     private double restingFaceScore = 0.0;
+
 
     public enum Exercise {
 
@@ -122,8 +122,8 @@ public class VisionMaster extends Thread {
         return instance;
     }
 
-
     public DecomposedFace getCurrentFace() {
+
         return currentFace;
     }
 
@@ -178,10 +178,6 @@ public class VisionMaster extends Thread {
     }
 
     /**
-     * Set's up the FaceMesh object for use
-     */
-
-    /**
      * function deals with all score system -> three flags as class flags
      * that define what state the user is at currently, deals with score comparing
      * and checks when user's face is resting.
@@ -197,6 +193,7 @@ public class VisionMaster extends Thread {
         }
         return false;
     }
+
 
     public void setupMeshRecognizer(Context context) {
         FaceMeshOptions faceMeshOptions =
@@ -232,8 +229,6 @@ public class VisionMaster extends Thread {
                         // Draw image
                         imageView.setFaceMeshResult(faceMeshResult);
                         uiUpdater.post(() -> imageView.update());
-
-                        checkForPracticeScore();
                     }
                 });
     }
