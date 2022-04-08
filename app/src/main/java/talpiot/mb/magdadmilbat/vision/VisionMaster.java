@@ -59,21 +59,48 @@ public class VisionMaster extends Thread {
     private DecomposedFace currentFace;
     private Exercise currentExr;
 
+    /**
+     * flags to define current face state during practice.
+     * counter to define how many rehearsals user made.
+     * */
+    private boolean restingFace = false;
+    private double rehearsalScoreToBeat = 0.0;
+    private double restingFaceScore = 0.0;
+
+
     public enum Exercise {
 
-        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore()),
-        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore());
+        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(), 10, 100),
+        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(), 10, 100);
 
         private final Supplier<Double> valSup;
+        private double restingMaximumScore, actingMinimumScore;
 
-        private Exercise(Supplier<Double> valueSupplier) {
+        Exercise(Supplier<Double> valueSupplier, double minScore, double maxScore) {
             this.valSup = valueSupplier;
+            setActingMinimumScore(minScore);
+            setRestingMaximumScore(maxScore);
         }
 
         public double get() {
             return valSup.get();
         }
 
+        public double getRestingMaximumScore() {
+            return restingMaximumScore;
+        }
+
+        public void setRestingMaximumScore(double restingMaximumScore) {
+            this.restingMaximumScore = restingMaximumScore;
+        }
+
+        public double getActingMinimumScore() {
+            return actingMinimumScore;
+        }
+
+        public void setActingMinimumScore(double actingMinimumScore) {
+            this.actingMinimumScore = actingMinimumScore;
+        }
     }
 
     private VisionMaster() {
@@ -151,8 +178,23 @@ public class VisionMaster extends Thread {
     }
 
     /**
-     * Set's up the FaceMesh object for use
-     */
+     * function deals with all score system -> three flags as class flags
+     * that define what state the user is at currently, deals with score comparing
+     * and checks when user's face is resting.
+     * */
+    public boolean checkForPracticeScore() {
+
+        if (this.getScore() >= currentExr.actingMinimumScore && this.restingFace) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty)
+            this.restingFace = false;
+            return true;
+        }
+        if (this.getScore() <= currentExr.restingMaximumScore){
+            this.restingFace = true;
+        }
+        return false;
+    }
+
+
     public void setupMeshRecognizer(Context context) {
         FaceMeshOptions faceMeshOptions =
                 FaceMeshOptions.builder()
