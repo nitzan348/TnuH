@@ -11,9 +11,9 @@ import java.util.ArrayList;
  *
  * @author Elia
  */
-public class DatabaseManager extends SQLiteOpenHelper {
+public class HistoryDatabaseManager extends SQLiteOpenHelper {
 
-    public DatabaseManager(Context context) {
+    public HistoryDatabaseManager(Context context) {
         super(context, "MyDatabase", null, 1); // 1 = version.
     }
 
@@ -31,7 +31,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     private void createTrainingTable(SQLiteDatabase sqLiteDatabase) {
         String sql = "Create table Training (id integer primary key autoincrement, exerciseDescription text not null," +
-                " date text not null, time text not null, duration text not null)";
+                " date text not null, time text not null, duration text not null, repetition integer not null)";
         sqLiteDatabase.execSQL(sql);
     }
 
@@ -39,8 +39,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
      * This function adds the value of the training it receives to the training table
      **/
     public void addTraining(TrainingData training) {
-        String sql = "insert into Training(date, time, exerciseDescription, duration) " +
-                "values ('" + training.getDate() + "','" + training.getTime() + "','" + training.getExerciseDescription() + "'," + training.getDuration() + ")";
+        String sql = "insert into Training(date, time, exerciseDescription, duration) values ('" +
+                training.getDate() + "','" + training.getTime() + "','" + training.getExerciseDescription()
+                + "','" + training.getDuration() + "','" + training.getRepetition() + "')";
         SQLiteDatabase sqLiteDatabase = getWritableDatabase(); // Open connection.
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close(); // Close connection.
@@ -55,12 +56,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
         int timeI = cursor.getColumnIndex("time");
         int durationI = cursor.getColumnIndex("duration");
         int exerciseDescriptionI = cursor.getColumnIndex("exerciseDescription");
+        int repetition = cursor.getColumnIndex("repetition");
         String duration = cursor.getString(durationI);
         String exerciseDescription = cursor.getString(exerciseDescriptionI);
         String date = cursor.getString(dateI);
         String time = cursor.getString(timeI);
 
-        return new TrainingData(date, time, exerciseDescription, duration);
+        return new TrainingData(date, time, exerciseDescription, duration, repetition);
 
     }
 

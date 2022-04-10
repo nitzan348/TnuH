@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import talpiot.mb.magdadmilbat.database.DatabaseManager;
+import talpiot.mb.magdadmilbat.database.HistoryDatabaseManager;
 import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 import talpiot.mb.magdadmilbat.vision.detectors.SimpleMouth;

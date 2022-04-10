@@ -21,15 +21,15 @@ import java.util.List;
 public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
     private Context context;
     private List<TrainingData> data;
-    private DatabaseManager manager;
+    private HistoryDatabaseManager manager;
 
     public TrainingDataAdapter(Context context, ArrayList<TrainingData> details) {
         super(context,
                 0,
                 0,
-                new DatabaseManager(context).getAllTraining());
+                new HistoryDatabaseManager(context).getAllTraining());
         this.context = context;
-        this.manager = new DatabaseManager(context);
+        this.manager = new HistoryDatabaseManager(context);
         this.data = manager.getAllTraining();
     }
 
@@ -42,12 +42,14 @@ public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
         TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
         TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
         TextView tvDuration = (TextView) view.findViewById(R.id.tvDuration);
+        TextView tvRepetition = (TextView) view.findViewById(R.id.tvRepetition);
 
         TrainingData temp = data.get(position);
         tvExercise.setText(temp.getExerciseDescription());
         tvDate.setText(temp.getDate());
         tvTime.setText(temp.getTime());
         tvDuration.setText(temp.getDuration());
+        tvRepetition.setText(temp.getRepetition()); // this isn't actually functional because the DB needs to be restarted
 
         return view;
     }

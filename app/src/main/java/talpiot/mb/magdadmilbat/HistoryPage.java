@@ -12,7 +12,7 @@ import com.example.MagdadMilbat.R;
 
 import java.util.ArrayList;
 
-import talpiot.mb.magdadmilbat.database.DatabaseManager;
+import talpiot.mb.magdadmilbat.database.HistoryDatabaseManager;
 import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.database.TrainingDataAdapter;
 
@@ -20,16 +20,16 @@ public class HistoryPage extends AppCompatActivity implements View.OnClickListen
     Button btnBack;
     ListView lvHistory;
     TrainingDataAdapter trainingDataAdapter;
-    DatabaseManager historyManger;
+    HistoryDatabaseManager historyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_page);
 
-        historyManger = new DatabaseManager(this);
+        historyManager = new HistoryDatabaseManager(this);
         btnBack = (Button)findViewById(R.id.btnBack);
-        trainingDataAdapter = new TrainingDataAdapter(this, historyManger.getAllTraining());
+        trainingDataAdapter = new TrainingDataAdapter(this, historyManager.getAllTraining());
         lvHistory = (ListView)findViewById(R.id.lvHistory);
 
         lvHistory.setAdapter(trainingDataAdapter);

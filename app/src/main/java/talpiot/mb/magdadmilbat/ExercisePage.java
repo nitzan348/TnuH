@@ -22,7 +22,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import talpiot.mb.magdadmilbat.database.DatabaseManager;
+import talpiot.mb.magdadmilbat.database.HistoryDatabaseManager;
 import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.vision.VisionMaster;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
@@ -38,10 +38,9 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     private boolean stopThread;
 
     private Button btnBack;
-    private TextView tvRepetition, tvExercise;
     String exerciseName;
     SharedPreferences sp;
-    DatabaseManager dbManager;
+    HistoryDatabaseManager dbManager;
 
     DateTimeFormatter dtf;
     LocalDateTime now;
@@ -51,20 +50,16 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_exercise_page);
+
         start = Instant.now();
 
         btnBack = (Button) findViewById(R.id.btnBack);
-        tvRepetition = (TextView) findViewById(R.id.tvRepetition);
-        tvExercise = (TextView) findViewById(R.id.tvExercise);
         btnBack.setOnClickListener(this);
-        tvExercise.setText(getIntent().getStringExtra("exercise"));
 
         exerciseName = getIntent().getStringExtra("exercise");
         sp = getSharedPreferences(getIntent().getStringExtra("exercise sp"), 0);
-        tvRepetition.setText(sp.getString("repetition", "1"));
-        dbManager = new DatabaseManager(this);
+        dbManager = new HistoryDatabaseManager(this);
 
         // I'm pretty sure only one of those lines is needed, but better safe than sorry
         PermissionHelper.checkAndRequestCameraPermissions(this);
@@ -154,7 +149,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     {
         long millis = Duration.between(start, end).toMillis();
         String[] datetime = dtf.format(now).split(" ", 2);
-        return new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis));
+        return new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis), 1);
+        // repetition isn't functional yet so the default is 1
     }
 
     @SuppressLint("DefaultLocale")
@@ -162,7 +158,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     {
         long seconds = millis / 1000;
         if (seconds % 60 < 10)
-            return String.format("'%d:0%d'", seconds / 60, seconds % 60);
-        return String.format("'%d:%d'", seconds / 60, seconds % 60);
+            return String.format("%d:0%d", seconds / 60, seconds % 60);
+        return String.format("%d:%d", seconds / 60, seconds % 60);
     }
 }
