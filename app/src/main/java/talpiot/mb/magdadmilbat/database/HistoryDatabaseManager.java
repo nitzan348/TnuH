@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class HistoryDatabaseManager extends SQLiteOpenHelper {
 
     public HistoryDatabaseManager(Context context) {
-        super(context, "MyDatabase", null, 1); // 1 = version.
+        super(context, "MyHisDatabase", null, 1); // 1 = version.
     }
 
     @Override
