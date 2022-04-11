@@ -1,10 +1,12 @@
 package talpiot.mb.magdadmilbat;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +34,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     private TextView tvRepetition, tvExercise;
     private boolean stopThread;
 
+    AnimationDrawable starAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,10 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         vision = VisionMaster.getInstance();
         vision.attachToContext(this);
         vision.attachFrame(findViewById(R.id.preview_display_layout));
+
+        ImageView ImageView = (ImageView) findViewById(R.id.star_image);
+        ImageView.setBackgroundResource(R.drawable.success_animation);
+        starAnimation = (AnimationDrawable) ImageView.getBackground();
     }
 
     @Override
