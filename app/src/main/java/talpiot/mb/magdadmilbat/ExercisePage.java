@@ -38,6 +38,17 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
 
     AnimationDrawable starAnimation;
 
+    private void showConffetti() {
+
+
+    }
+
+    private void playTing() {
+
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
