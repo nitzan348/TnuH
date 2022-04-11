@@ -34,6 +34,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     private TextView tvRepetition, tvExercise;
     private boolean stopThread;
 
+
+
     AnimationDrawable starAnimation;
 
     @Override
@@ -58,6 +60,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         ImageView ImageView = (ImageView) findViewById(R.id.star_image);
         ImageView.setBackgroundResource(R.drawable.success_animation);
         starAnimation = (AnimationDrawable) ImageView.getBackground();
+
+
     }
 
     @Override
