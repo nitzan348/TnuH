@@ -32,6 +32,17 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     private TextView tvRepetition, tvExercise;
     private boolean stopThread;
 
+    private void showConffetti() {
+
+
+    }
+
+    private void playTing() {
+
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
