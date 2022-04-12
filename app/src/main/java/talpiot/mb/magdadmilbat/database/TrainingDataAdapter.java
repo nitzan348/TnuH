@@ -21,16 +21,14 @@ import java.util.List;
 public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
     private Context context;
     private List<TrainingData> data;
-    private HistoryDatabaseManager manager;
 
     public TrainingDataAdapter(Context context, ArrayList<TrainingData> details) {
         super(context,
                 0,
                 0,
-                new HistoryDatabaseManager(context).getAllTraining());
+                details);
         this.context = context;
-        this.manager = new HistoryDatabaseManager(context);
-        this.data = manager.getAllTraining();
+        this.data = details;
     }
 
     @Override

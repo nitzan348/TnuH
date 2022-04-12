@@ -194,8 +194,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     {
         long millis = Duration.between(start, end).toMillis();
         String[] datetime = dtf.format(now).split(" ", 2);
-        return new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis), 1);
-        // repetition isn't functional yet so the default is 1
+        return new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis), reps);
     }
 
     @SuppressLint("DefaultLocale")

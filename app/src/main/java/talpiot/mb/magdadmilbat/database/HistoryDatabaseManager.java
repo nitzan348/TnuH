@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class HistoryDatabaseManager extends SQLiteOpenHelper {
 
     public HistoryDatabaseManager(Context context) {
-        super(context, "MyHisDatabase", null, 1); // 1 = version.
+        super(context, "Training", null, 1); // 1 = version.
     }
 
     @Override
@@ -30,7 +30,7 @@ public class HistoryDatabaseManager extends SQLiteOpenHelper {
     }
 
     private void createTrainingTable(SQLiteDatabase sqLiteDatabase) {
-        String sql = "Create table Training (id integer primary key autoincrement, exerciseDescription text not null," +
+        String sql = "create table Training (id integer primary key autoincrement, exerciseDescription text not null," +
                 " date text not null, time text not null, duration text not null, repetition integer not null)";
         sqLiteDatabase.execSQL(sql);
     }
@@ -39,9 +39,9 @@ public class HistoryDatabaseManager extends SQLiteOpenHelper {
      * This function adds the value of the training it receives to the training table
      **/
     public void addTraining(TrainingData training) {
-        String sql = "insert into Training(date, time, exerciseDescription, duration) values ('" +
-                training.getDate() + "','" + training.getTime() + "','" + training.getExerciseDescription()
-                + "','" + training.getDuration() + "','" + training.getRepetition() + "')";
+        String sql = "insert into Training(exerciseDescription, date, time, duration, repetition) values ('" +
+                training.getExerciseDescription() + "',  '" + training.getDate() + "', '" + training.getTime()
+                + "', '" + training.getDuration() + "', '" + training.getRepetition() + "')";
         SQLiteDatabase sqLiteDatabase = getWritableDatabase(); // Open connection.
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close(); // Close connection.
