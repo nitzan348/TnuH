@@ -12,23 +12,27 @@ import com.example.MagdadMilbat.R;
 
 import java.util.ArrayList;
 
+
+import talpiot.mb.magdadmilbat.database.HistoryDatabaseManager;
 import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.database.TrainingDataAdapter;
 
 public class HistoryPage extends AppCompatActivity implements View.OnClickListener {
     Button btnBack;
     ListView lvHistory;
-    ArrayList<TrainingData> trainingData;
+
     TrainingDataAdapter trainingDataAdapter;
+    HistoryDatabaseManager historyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_page);
 
+        historyManager = new HistoryDatabaseManager(this);
         btnBack = (Button)findViewById(R.id.btnBack);
-        trainingData = new ArrayList<TrainingData>();
-        trainingDataAdapter = new TrainingDataAdapter(this, trainingData);
+
+        trainingDataAdapter = new TrainingDataAdapter(this, historyManager.getAllTraining());
         lvHistory = (ListView)findViewById(R.id.lvHistory);
 
         lvHistory.setAdapter(trainingDataAdapter);
