@@ -1,6 +1,8 @@
 package talpiot.mb.magdadmilbat;
 
 import android.content.Intent;
+
+import android.media.MediaPlayer;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,8 +55,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     }
 
     private void playTing() {
-
-
+        MediaPlayer ting = MediaPlayer.create(this, R.raw.success);
+        ting.start();
     }
 
 
