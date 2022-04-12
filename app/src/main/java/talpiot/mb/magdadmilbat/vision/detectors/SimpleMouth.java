@@ -57,7 +57,7 @@ public class SimpleMouth implements IMouth {
 
         return dynamicMouthSymmetryCalculator.maximumDistanceToMakeSymmetric(
                 LipsMiddleBot, normalizationVector
-        );
+        ) / getWidthNormalizer();
     }
 
     @Override

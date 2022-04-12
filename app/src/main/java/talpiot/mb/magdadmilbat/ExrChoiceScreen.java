@@ -59,6 +59,7 @@ public class ExrChoiceScreen extends AppCompatActivity implements View.OnClickLi
             Intent intent = new Intent(this, ExercisePage.class);
             intent.putExtra("exercise", "נשיקה");
             intent.putExtra("exercise sp", "settings kiss");
+            VisionMaster.getInstance().setCurrentExr(VisionMaster.Exercise.KISS);
             startActivity(intent);
         }
         else if (view == btnCheeks)

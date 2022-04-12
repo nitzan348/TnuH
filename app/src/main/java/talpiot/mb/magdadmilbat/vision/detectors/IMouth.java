@@ -59,19 +59,10 @@ public interface IMouth {
 
     /**
      *
-     * @param input Some quality parameters
-     * @return New quality parameter that takes into account symmetry
-     */
-    default double enforceSymmetry(double input) {
-        return 0.5 * input - 0.5 * getSymmetryCoef();
-    }
-
-    /**
-     *
      * @return Get the score for the "open mouth wide" exercise
      */
     default double getBigMouthScore() {
-        return enforceSymmetry(getArea() / (getHeightNormalizer() * getWidthNormalizer()));
+        return getArea() / (getHeightNormalizer() * getWidthNormalizer());
     }
 
     /**
@@ -86,7 +77,7 @@ public interface IMouth {
      * @return number representing the success of a kiss
      */
     default double getKissScore() {
-        return enforceSymmetry(getHeightWidthRatio());
+        return getHeightWidthRatio();
     }
 
     /**
@@ -94,6 +85,6 @@ public interface IMouth {
      * @return Get the score for the "smile wide exercise
      */
     default double getSmileScore() {
-        return enforceSymmetry(getWidth() / getWidthNormalizer());
+        return getWidth() / getWidthNormalizer();
     }
 }

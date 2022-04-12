@@ -35,4 +35,13 @@ public class PointPair {
     public Point getSecond() {
         return second;
     }
+
+
+    @Override
+    public String toString() {
+        return "PointPair{" +
+                "first=" + first +
+                ", second=" + second +
+                '}';
+    }
 }
