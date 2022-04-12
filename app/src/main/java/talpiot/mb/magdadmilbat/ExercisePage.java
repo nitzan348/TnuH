@@ -1,5 +1,6 @@
 package talpiot.mb.magdadmilbat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 
 import android.media.MediaPlayer;
@@ -8,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,8 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
 import com.google.mediapipe.components.PermissionHelper;
+import com.plattysoft.leonids.ParticleSystem;
 
-import talpiot.mb.magdadmilbat.database.DatabaseManager;
+import java.io.IOException;
+
 import talpiot.mb.magdadmilbat.vision.VisionMaster;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 
@@ -35,18 +37,35 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     private Button btnBack;
     private TextView tvRepetition, tvExercise;
     private boolean stopThread;
+    private int reps;
 
 
 
     AnimationDrawable starAnimation;
 
     private void showConffetti() {
-
-
+        new ParticleSystem(this, 200, R.drawable.confeti2, 10000)
+                .setSpeedModuleAndAngleRange(0.1f, 0.3f, 90, 180)
+                .setRotationSpeed(144)
+                .setAcceleration(0.00005f, 90)
+                .emit(findViewById(R.id.emiter_top_right), 100, 500);
+        new ParticleSystem(this, 200, R.drawable.confeti3, 10000)
+                .setSpeedModuleAndAngleRange(0.1f, 0.3f, 0, 90)
+                .setRotationSpeed(144)
+                .setAcceleration(0.00005f, 90)
+                .emit(findViewById(R.id.emiter_top_left), 100, 500);
     }
 
+    private MediaPlayer ting;
     private void playTing() {
-        MediaPlayer ting = MediaPlayer.create(this, R.raw.success);
+        if (ting.isPlaying()) {
+            ting.stop();        try {
+                ting.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
         ting.start();
     }
 
@@ -70,11 +89,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         vision.attachToContext(this);
         vision.attachFrame(findViewById(R.id.preview_display_layout));
 
-        ImageView ImageView = (ImageView) findViewById(R.id.star_image);
-        ImageView.setBackgroundResource(R.drawable.success_animation);
-        starAnimation = (AnimationDrawable) ImageView.getBackground();
-
-
+        this.reps = 0;
     }
 
     @Override
@@ -96,11 +111,13 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        ting = MediaPlayer.create(this, R.raw.success);
         if (PermissionHelper.cameraPermissionsGranted(this)) {
             vision.attachCamera(this);
 
             stopThread = false;
             new Thread(new Runnable() {
+                @SuppressLint("DefaultLocale")
                 @Override
                 public void run() {
                     TextView txt = findViewById(R.id.exerciseQualDisplay);
@@ -114,9 +131,15 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                             IMouth mouth = vision.getCurrentFace().getMouth();
 
                             runOnUiThread(() -> txt.setText(
-                                    String.format("Score: %o",
-                                            (int) (1000 * vision.getScore()))
+                                    String.format("reps done: %d",
+                                            reps)
                             ));
+
+                            if (VisionMaster.getInstance().didCompleteRep()) {
+                                reps += 1;
+                                runOnUiThread(() -> showConffetti());
+                                playTing();
+                            }
 
                             Log.i(TAG, mouth.toString());
                         }

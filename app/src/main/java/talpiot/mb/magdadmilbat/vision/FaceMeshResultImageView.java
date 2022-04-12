@@ -39,7 +39,8 @@ public class FaceMeshResultImageView extends AppCompatImageView {
     private static final String TAG = "FaceMeshResultImageView";
 
     private static final int LIPS_COLOR = Color.parseColor("#E0E0E0");
-    private static final int LIPS_THICKNESS = 5; // Pixels
+    private static final int LIPS_THICKNESS = 3; // Pixels
+    private static final int LIPS_ALPHA = 60;
     private Bitmap latest;
 
     public FaceMeshResultImageView(Context context) {
@@ -98,6 +99,7 @@ public class FaceMeshResultImageView extends AppCompatImageView {
             Paint connectionPaint = new Paint();
             connectionPaint.setColor(FaceMeshResultImageView.LIPS_COLOR);
             connectionPaint.setStrokeWidth(FaceMeshResultImageView.LIPS_THICKNESS);
+            connectionPaint.setAlpha(LIPS_ALPHA);
             NormalizedLandmark start = faceLandmarkList.get(c.start());
             NormalizedLandmark end = faceLandmarkList.get(c.end());
             canvas.drawLine(

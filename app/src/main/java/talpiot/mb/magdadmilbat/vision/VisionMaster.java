@@ -14,14 +14,8 @@ import com.google.mediapipe.solutioncore.CameraInput;
 import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.function.Supplier;
 
-import talpiot.mb.magdadmilbat.database.DatabaseManager;
-import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 import talpiot.mb.magdadmilbat.vision.detectors.SimpleMouth;
 
@@ -62,7 +56,7 @@ public class VisionMaster extends Thread {
     /**
      * flags to define current face state during practice.
      * counter to define how many rehearsals user made.
-     * */
+     */
     private boolean restingFace = false;
     private double rehearsalScoreToBeat = 0.0;
     private double restingFaceScore = 0.0;
@@ -70,16 +64,29 @@ public class VisionMaster extends Thread {
 
     public enum Exercise {
 
-        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(), 10, 100),
-        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(), 10, 100);
+        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(),
+                0.42, 0.35, 0.035),
+        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(),
+                0.32, 0.12, 0.035),
+        KISS(() -> VisionMaster.getInstance().currentFace.getMouth().getKissScore(),
+                65, 40, 0.035);
 
         private final Supplier<Double> valSup;
-        private double restingMaximumScore, actingMinimumScore;
+        private double restingMaximumScore, actingMinimumScore, maximumSymmetry;
 
-        Exercise(Supplier<Double> valueSupplier, double minScore, double maxScore) {
+        Exercise(Supplier<Double> valueSupplier, double actingMin, double restingMax, double maxSym) {
             this.valSup = valueSupplier;
-            setActingMinimumScore(minScore);
-            setRestingMaximumScore(maxScore);
+            setActingMinimumScore(actingMin);
+            setRestingMaximumScore(restingMax);
+            setMaximumSymmetry(maxSym);
+        }
+
+        public double getMaximumSymmetry() {
+            return maximumSymmetry;
+        }
+
+        public void setMaximumSymmetry(double maximumSymmetry) {
+            this.maximumSymmetry = maximumSymmetry;
         }
 
         public double get() {
@@ -106,15 +113,6 @@ public class VisionMaster extends Thread {
     private VisionMaster() {
     }
 
-    public void startNewSession() {
-//        DatabaseManager thread = new DatabaseManager(imageView.getContext());
-//        Date c = Calendar.getInstance().getTime();
-//        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-//        String formattedDate = df.format(c);
-//        TrainingData training(c, );
-//        thread.addTraining(TrainingData training);
-    }
-
     public static VisionMaster getInstance() {
         if (instance == null) {
             instance = new VisionMaster();
@@ -132,6 +130,10 @@ public class VisionMaster extends Thread {
             return currentExr.get();
         }
         return 0;
+    }
+
+    public double getSymmetryScore() {
+        return currentFace.getMouth().getSymmetryCoef();
     }
 
     public static class DecomposedFace {
@@ -181,14 +183,15 @@ public class VisionMaster extends Thread {
      * function deals with all score system -> three flags as class flags
      * that define what state the user is at currently, deals with score comparing
      * and checks when user's face is resting.
-     * */
-    public boolean checkForPracticeScore() {
+     */
+    public boolean didCompleteRep() {
 
-        if (this.getScore() >= currentExr.actingMinimumScore && this.restingFace) { //CAN BE CHANGES ACCORDING TO CLIENT REQUEST(private field). (level of difficulty)
+        if (this.getScore() >= currentExr.actingMinimumScore && this.restingFace
+                && currentExr.maximumSymmetry > getSymmetryScore()) {
             this.restingFace = false;
             return true;
         }
-        if (this.getScore() <= currentExr.restingMaximumScore){
+        if (this.getScore() <= currentExr.restingMaximumScore) {
             this.restingFace = true;
         }
         return false;

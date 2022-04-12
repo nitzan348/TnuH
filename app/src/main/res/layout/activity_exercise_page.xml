@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context="talpiot.mb.magdadmilbat.ExercisePage">
 
+
+    <View android:id="@+id/emiter_top_left"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="-20dp"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
+
+    <View android:id="@+id/emiter_top_right"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="-20dp"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
+
     <Button
         android:id="@+id/btnBack"
         android:layout_width="60dp"
@@ -19,14 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal">
-
-        <ImageView
-            android:id="@+id/star_image"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:src="@drawable/star"/>
-
-
 
 
         <TextView
@@ -61,6 +66,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
+
+
         <FrameLayout
             android:id="@+id/preview_display_layout"
             android:layout_width="fill_parent"
@@ -68,6 +75,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:background="@color/black">
+
 
             <TextView
                 android:id="@+id/no_camera_access_view"
