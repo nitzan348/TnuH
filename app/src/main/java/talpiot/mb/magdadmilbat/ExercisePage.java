@@ -69,12 +69,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         vision = VisionMaster.getInstance();
         vision.attachToContext(this);
         vision.attachFrame(findViewById(R.id.preview_display_layout));
-
-        ImageView ImageView = (ImageView) findViewById(R.id.star_image);
-        ImageView.setBackgroundResource(R.drawable.success_animation);
-        starAnimation = (AnimationDrawable) ImageView.getBackground();
-
-
     }
 
     @Override
