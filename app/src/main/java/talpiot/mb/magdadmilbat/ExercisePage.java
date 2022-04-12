@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
 import com.google.mediapipe.components.PermissionHelper;
+import com.plattysoft.leonids.ParticleSystem;
 
 import talpiot.mb.magdadmilbat.database.DatabaseManager;
 import talpiot.mb.magdadmilbat.vision.VisionMaster;
@@ -39,8 +40,16 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     AnimationDrawable starAnimation;
 
     private void showConffetti() {
-
-
+        new ParticleSystem(this, 200, R.drawable.confeti2, 10000)
+                .setSpeedModuleAndAngleRange(0f, 0.3f, 90, 180)
+                .setRotationSpeed(144)
+                .setAcceleration(0.00005f, 90)
+                .emit(findViewById(R.id.emiter_top_right), 18);
+        new ParticleSystem(this, 200, R.drawable.confeti3, 10000)
+                .setSpeedModuleAndAngleRange(0f, 0.3f, 0, 90)
+                .setRotationSpeed(144)
+                .setAcceleration(0.00005f, 90)
+                .emit(findViewById(R.id.emiter_top_left), 18);
     }
 
     private void playTing() {
@@ -68,9 +77,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         vision.attachToContext(this);
         vision.attachFrame(findViewById(R.id.preview_display_layout));
 
-        ImageView ImageView = (ImageView) findViewById(R.id.star_image);
-        ImageView.setBackgroundResource(R.drawable.success_animation);
-        starAnimation = (AnimationDrawable) ImageView.getBackground();
 
 
     }
@@ -94,6 +100,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        showConffetti();
         if (PermissionHelper.cameraPermissionsGranted(this)) {
             vision.attachCamera(this);
 
