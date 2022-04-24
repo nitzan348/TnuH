@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
 
+import talpiot.mb.magdadmilbat.vision.VisionMaster;
+
 public class SettingsChoiceScreen extends AppCompatActivity implements View.OnClickListener {
     Button btnBack, btnSmile, btnOpenMouth, btnKiss, btnCheeks;
 
@@ -41,21 +43,21 @@ public class SettingsChoiceScreen extends AppCompatActivity implements View.OnCl
         {
             Intent intent = new Intent(this, SettingsPage.class);
             intent.putExtra("exercise", "הגדרות חיוך");
-            intent.putExtra("exercise sp", "settings smile");
+            intent.putExtra("exercise sp", VisionMaster.Exercise.SMILE.name());
             startActivity(intent);
         }
         else if (view == btnOpenMouth)
         {
             Intent intent = new Intent(this, SettingsPage.class);
             intent.putExtra("exercise", "הגדרות פה גדול");
-            intent.putExtra("exercise sp", "settings open mouth");
+            intent.putExtra("exercise sp", VisionMaster.Exercise.BIG_MOUTH.name());
             startActivity(intent);
         }
         else if (view == btnKiss)
         {
             Intent intent = new Intent(this, SettingsPage.class);
             intent.putExtra("exercise", "הגדרות נשיקה");
-            intent.putExtra("exercise sp", "settings kiss");
+            intent.putExtra("exercise sp", VisionMaster.Exercise.KISS.name());
             startActivity(intent);
         }
         else if (view == btnCheeks)

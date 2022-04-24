@@ -2,6 +2,7 @@ package talpiot.mb.magdadmilbat.vision;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +44,8 @@ public class VisionMaster extends Thread {
     private FaceMesh faceMesh;
     private FaceMeshResultImageView imageView;
 
+    private Context context;
+
     /**
      * Width and height parameters for the CameraInput object.
      * I'm not sure what they do, my best guess is they define the frame dimensions returned
@@ -58,18 +61,15 @@ public class VisionMaster extends Thread {
      * counter to define how many rehearsals user made.
      */
     private boolean restingFace = false;
-    private double rehearsalScoreToBeat = 0.0;
-    private double restingFaceScore = 0.0;
-
 
     public enum Exercise {
 
         SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(),
-                0.42, 0.35, 0.035),
+                0.42, 0.315, 0.035),
         BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(),
-                0.32, 0.12, 0.035),
+                0.35, 0.1, 0.035),
         KISS(() -> VisionMaster.getInstance().currentFace.getMouth().getKissScore(),
-                65, 40, 0.035);
+                100, 40, 0.035);
 
         private final Supplier<Double> valSup;
         private double restingMaximumScore, actingMinimumScore, maximumSymmetry;
@@ -79,6 +79,35 @@ public class VisionMaster extends Thread {
             setActingMinimumScore(actingMin);
             setRestingMaximumScore(restingMax);
             setMaximumSymmetry(maxSym);
+        }
+
+        public double getActualActingMin() {
+
+            double difficulty =
+                    Integer.parseInt(VisionMaster.getInstance().context
+                            .getSharedPreferences(name(), 0)
+                            .getString("diff", "1")) / 100.0;
+
+            double min = restingMaximumScore + (actingMinimumScore - restingMaximumScore) * 0.1; // Arbitrary 10%
+
+            Log.i(VisionMaster.TAG, "min diff = " + min + " ret diff = "
+                    + (min + difficulty*((actingMinimumScore - min)/0.8)));
+
+            return min + difficulty*((actingMinimumScore - min)/0.8); // 0.8 to have regular human values at 80%
+        }
+        public double getActualRestingMax() {
+            return restingMaximumScore;
+        }
+        public double getActualMaxSym() {
+            double difficulty =
+                    Integer.parseInt(
+                            VisionMaster.getInstance().context
+                                    .getSharedPreferences(name(), 0)
+                                    .getString("sym_diff", "1")) / 100.0;
+
+            double max = maximumSymmetry * 5; // Arbitrary 500%
+
+            return max - difficulty*(max - 0.8*maximumSymmetry); // Again arbitrary
         }
 
         public double getMaximumSymmetry() {
@@ -151,6 +180,7 @@ public class VisionMaster extends Thread {
     public void attachToContext(Context context) {
         setupMeshRecognizer(context);
         imageView = new FaceMeshResultImageView(context);
+        this.context = context;
     }
 
     public void attachFrame(@NonNull FrameLayout frame) {
@@ -186,12 +216,12 @@ public class VisionMaster extends Thread {
      */
     public boolean didCompleteRep() {
 
-        if (this.getScore() >= currentExr.actingMinimumScore && this.restingFace
-                && currentExr.maximumSymmetry > getSymmetryScore()) {
+        if (this.getScore() >= currentExr.getActualActingMin() && this.restingFace
+                && currentExr.getActualMaxSym() > getSymmetryScore()) {
             this.restingFace = false;
             return true;
         }
-        if (this.getScore() <= currentExr.restingMaximumScore) {
+        if (this.getScore() <= currentExr.getActualRestingMax()) {
             this.restingFace = true;
         }
         return false;
