@@ -91,13 +91,15 @@ public class VisionMaster extends Thread {
             double min = restingMaximumScore + (actingMinimumScore - restingMaximumScore) * 0.1; // Arbitrary 10%
 
             Log.i(VisionMaster.TAG, "min diff = " + min + " ret diff = "
-                    + (min + difficulty*((actingMinimumScore - min)/0.8)));
+                    + (min + difficulty * ((actingMinimumScore - min) / 0.8)));
 
-            return min + difficulty*((actingMinimumScore - min)/0.8); // 0.8 to have regular human values at 80%
+            return min + difficulty * ((actingMinimumScore - min) / 0.8); // 0.8 to have regular human values at 80%
         }
+
         public double getActualRestingMax() {
             return restingMaximumScore;
         }
+
         public double getActualMaxSym() {
             double difficulty =
                     Integer.parseInt(
@@ -107,7 +109,7 @@ public class VisionMaster extends Thread {
 
             double max = maximumSymmetry * 5; // Arbitrary 500%
 
-            return max - difficulty*(max - 0.8*maximumSymmetry); // Again arbitrary
+            return max - difficulty * (max - 0.8 * maximumSymmetry); // Again arbitrary
         }
 
         public double getMaximumSymmetry() {
@@ -227,6 +229,9 @@ public class VisionMaster extends Thread {
         return false;
     }
 
+    public boolean isRestingFace() {
+        return this.restingFace;
+    }
 
     public void setupMeshRecognizer(Context context) {
         FaceMeshOptions faceMeshOptions =

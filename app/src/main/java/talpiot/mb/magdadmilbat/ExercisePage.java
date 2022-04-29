@@ -152,7 +152,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                 @SuppressLint("DefaultLocale")
                 @Override
                 public void run() {
-                    TextView txt = findViewById(R.id.exerciseQualDisplay);
+                    TextView repCounter = findViewById(R.id.exerciseQualDisplay);
+                    TextView commandDisplayer = findViewById(R.id.commandToDo);
                     while (!stopThread) {
                         try {
                             Thread.sleep(200);
@@ -162,7 +163,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                         if (vision.getCurrentFace() != null) {
                             IMouth mouth = vision.getCurrentFace().getMouth();
 
-                            runOnUiThread(() -> txt.setText(
+                            runOnUiThread(() -> repCounter.setText(
                                     String.format("%d",
                                             reps)
                             ));
@@ -171,6 +172,14 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                                 reps += 1;
                                 runOnUiThread(() -> showConffetti());
                                 playTing();
+                                runOnUiThread(() -> {
+                                    commandDisplayer.setText(getString(R.string.relax_command));
+                                });
+                            }
+                            if (VisionMaster.getInstance().isRestingFace()) {
+                                runOnUiThread(() -> {
+                                    commandDisplayer.setText("");
+                                });
                             }
 
                             Log.i(TAG, mouth.toString());
