@@ -23,7 +23,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:text="היסטוריה"
-        android:visibility="gone"
         android:textSize="30dp" />
 
     <Button

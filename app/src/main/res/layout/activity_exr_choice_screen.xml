@@ -52,7 +52,6 @@
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
         android:text="ניפוח לחיים"
-        android:visibility="gone"
         />
 
 </LinearLayout>
