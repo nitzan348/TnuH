@@ -27,11 +27,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:layout_marginRight="10dp"
         android:textSize="25sp"
-        android:text = "רמת קושי:"
+        android:text = "@string/difficulty"
         android:id="@+id/tvLevel"
         />
 
@@ -54,11 +53,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="10dp"
         android:textSize="25sp"
-        android:text = "רמת סימטריה דרושה:"
+        android:text = "@string/symmery_level"
         android:id="@+id/tvRepetition"
         />
 
@@ -105,7 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:text="שמור"
+        android:text="@string/save"
         android:id="@+id/btnSave"
         />
 

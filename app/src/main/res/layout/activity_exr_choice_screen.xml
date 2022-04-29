@@ -21,7 +21,7 @@
         android:layout_width="350dp"
         android:layout_height="100dp"
         android:layout_marginTop="50dp"
-        android:text="חיוך"
+        android:text="@string/smile"
         />
 
     <Button
@@ -31,7 +31,7 @@
         android:layout_width="350dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
-        android:text="פה גדול"
+        android:text="@string/open_mouth"
         />
 
     <Button
@@ -41,7 +41,7 @@
         android:layout_width="350dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
-        android:text="נשיקה"
+        android:text="@string/kiss"
         />
 
     <Button
@@ -51,7 +51,7 @@
         android:layout_width="350dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
-        android:text="ניפוח לחיים"
+        android:text="@string/cheek_blow"
         />
 
 </LinearLayout>

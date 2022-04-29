@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">Tnu Hiuch 0.3</string>
-    <string name="no_camera_access">Please grant camera permissions.</string>
-    <string name="difficulty">Difficulty:</string>
+    <string name="no_camera_access" translatable="false">please grant camera permissions</string>
+    <string name="difficulty">difficulty</string>
+    <string name="kiss">kiss</string>
+    <string name="cheek_blow">blow cheeks</string>
+    <string name="smile">smile</string>
+    <string name="open_mouth">open mouth</string>
+    <string name="symmery_level">symmetry level</string>
+    <string name="start_exr">start exercise</string>
+    <string name="history">history</string>
+    <string name="settings">settings</string>
+    <string name="save">save</string>
 </resources>

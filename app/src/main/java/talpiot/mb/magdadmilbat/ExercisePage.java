@@ -163,7 +163,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                             IMouth mouth = vision.getCurrentFace().getMouth();
 
                             runOnUiThread(() -> txt.setText(
-                                    String.format("reps done: %d",
+                                    String.format("%d",
                                             reps)
                             ));
 
