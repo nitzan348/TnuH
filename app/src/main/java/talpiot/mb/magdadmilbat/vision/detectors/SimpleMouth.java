@@ -53,6 +53,17 @@ public class SimpleMouth implements IMouth {
         faceBot = new Point(face.getLandmark(152));
     }
 
+
+    public int getTopX() { return (int)top.getX(); }
+    public int getTopY() { return (int)top.getY(); }
+    public int getBotX() { return (int)bot.getX(); }
+    public int getBotY() { return (int)bot.getY(); }
+
+    public int getLeftX() { return (int)cornerLeft.getX(); }
+    public int getLeftY() { return (int)cornerLeft.getY(); }
+    public int getRightX() { return (int)cornerRight.getX(); }
+    public int getRightY() { return (int)cornerRight.getY(); }
+
     @Override
     public double getWidthNormalizer() {
         return Point.dist(faceTop, faceBot);

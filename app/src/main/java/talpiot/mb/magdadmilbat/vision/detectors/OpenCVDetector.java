@@ -1,4 +1,6 @@
 package talpiot.mb.magdadmilbat.vision.detectors;
+import static talpiot.mb.magdadmilbat.vision.VisionMaster.getInstance;
+
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.framework.TextureFrame;
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
@@ -24,15 +26,16 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 
+
 public class OpenCVDetector {
     final static int MAX_H = 10;
-    final static int MIN_H = 0;
+    final static int MIN_H = 10;
 
-    final static int MAX_S = 27 + 10;
-    final static int MIN_S = 27 - 10;
+    final static int MAX_S = 10;
+    final static int MIN_S = 10;
 
-    final static int MAX_V = 99 + 30;
-    final static int MIN_V = 99 - 30;
+    final static int MAX_V = 30;
+    final static int MIN_V = 30;
 
 
     public Mat getCroppedPicture(Mat cropImage, SimpleMouth face) {
@@ -65,7 +68,30 @@ public class OpenCVDetector {
         Imgproc.cvtColor(croppedImage, dstHSV, Imgproc.COLOR_RGB2HSV);
         Mat dst = new Mat();
 
-        Core.inRange(dstHSV, new Scalar(MIN_H, MIN_S, MIN_V), new Scalar(MAX_H, MAX_S, MAX_V), dst);
+
+        SimpleMouth mt = (SimpleMouth)getInstance().getCurrentFace().getMouth();
+
+        double[] hsv = dstHSV.get(mt.getBotX(), mt.getTopY() - (mt.getTopY() - mt.getBotY() / 3));
+        double H = hsv[0] * 100; //hue
+        double S = hsv[1] * 100; //saturation
+        double V = hsv[2] * 100; //value
+        if((H == 0 || (H > 0 && H < 20)) && (S == 0 || (S > 0 && S < 20)) && V > 85 && V < 105)
+        {
+            //If it's white - teeth in mouth
+            Core.inRange(dstHSV, new Scalar(0 , 0, 85), new Scalar(20, 0, 105), dst);
+        }
+
+
+        hsv = dstHSV.get(mt.getLeftX() - Math.abs((mt.getRightX() - mt.getLeftX()) / 3), mt.getRightY());
+        H = hsv[0] * 100; //hue
+        S = hsv[1] * 100; //saturation
+        V = hsv[2] * 100; //value
+        if(H == 0)
+        {
+            //If it's black - dark space in mouth - teeth
+            Core.inRange(dstHSV, new Scalar(MIN_H , MIN_S, MIN_V), new Scalar(MAX_H, MAX_S, MAX_V), dst);
+        }
+
 
 //        Mat ret = new Mat();
         //cropped image hsvto rgb
