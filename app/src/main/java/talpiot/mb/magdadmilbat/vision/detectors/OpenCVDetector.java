@@ -7,7 +7,9 @@ import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.core.Core;
+import org.opencv.core.CvException;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -16,6 +18,7 @@ import org.opencv.core.Mat;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.util.Log;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -25,6 +28,9 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Scalar;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class OpenCVDetector {
@@ -37,6 +43,20 @@ public class OpenCVDetector {
     final static int MAX_V = 30;
     final static int MIN_V = 30;
 
+    private static Bitmap convertMatToBitMap(Mat input){
+        Bitmap bmp = null;
+        Mat rgb = new Mat();
+        Imgproc.cvtColor(input, rgb, Imgproc.COLOR_BGR2RGB);
+
+        try {
+            bmp = Bitmap.createBitmap(rgb.cols(), rgb.rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(rgb, bmp);
+        }
+        catch (CvException e){
+            Log.d("Exception",e.getMessage());
+        }
+        return bmp;
+    }
 
     public Mat getCroppedPicture(Mat cropImage, SimpleMouth face) {
         Point upperLeft = new Point(face.getCornerLeft().getX() - 10, face.getTop().getY());
@@ -45,6 +65,23 @@ public class OpenCVDetector {
         Rect rect = new Rect((int) upperLeft.x, (int) upperLeft.y,
                 (int) Math.abs(upperLeft.x - lowerRight.x + 1), (int) Math.abs(lowerRight.y - upperLeft.y + 1));
         return cropImage.submat(rect);
+    }
+
+    public Mat CropLips(Mat cropImage, SimpleMouth face) {
+        int lineType = 8;
+        int shift = 0;
+
+        MatOfPoint matPt = new MatOfPoint();
+        //matPt.fromArray(face.);
+        List<MatOfPoint> ppt = new ArrayList<MatOfPoint>();
+        ppt.add(matPt);
+        Imgproc.fillPoly(cropImage,
+                ppt,
+                new Scalar( 255, 255, 255 ),
+                lineType,
+                shift,
+                new Point(0,0) );
+        return cropImage;
     }
 
     public Mat faceMashToCVFrame(FaceMeshResult res) {
