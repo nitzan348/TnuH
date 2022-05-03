@@ -62,9 +62,11 @@ public class OpenCVDetector {
         Point upperLeft = new Point(face.getCornerLeft().getX() - 10, face.getTop().getY());
         Point lowerRight = new Point(face.getCornerRight().getX() + 10, face.getBot().getY());
 
+        Mat paintedMouthArea = this.CropLips(cropImage, face);
+
         Rect rect = new Rect((int) upperLeft.x, (int) upperLeft.y,
                 (int) Math.abs(upperLeft.x - lowerRight.x + 1), (int) Math.abs(lowerRight.y - upperLeft.y + 1));
-        return cropImage.submat(rect);
+        return paintedMouthArea.submat(rect);
     }
 
     public Mat CropLips(Mat cropImage, SimpleMouth face) {
@@ -72,15 +74,26 @@ public class OpenCVDetector {
         int shift = 0;
 
         MatOfPoint matPt = new MatOfPoint();
-        //matPt.fromArray(face.);
+        matPt.fromArray((Point[]) face.getUpperLipAreaLeftToRight().toArray());
         List<MatOfPoint> ppt = new ArrayList<MatOfPoint>();
         ppt.add(matPt);
         Imgproc.fillPoly(cropImage,
                 ppt,
-                new Scalar( 255, 255, 255 ),
+                new Scalar( 0,0,0 ),
                 lineType,
                 shift,
                 new Point(0,0) );
+
+        matPt.fromArray((Point[]) face.getLowerLipAreaLeftToRight().toArray());
+        ppt = new ArrayList<MatOfPoint>();
+        ppt.add(matPt);
+        Imgproc.fillPoly(cropImage,
+                ppt,
+                new Scalar( 0,0,0 ),
+                lineType,
+                shift,
+                new Point(0,0) );
+
         return cropImage;
     }
 

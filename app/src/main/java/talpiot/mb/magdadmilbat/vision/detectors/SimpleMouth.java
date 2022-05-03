@@ -37,7 +37,16 @@ public class SimpleMouth implements IMouth {
         return leftCorenerToMiddleBot;
     }
 
+    public Vector<Point> getUpperLipAreaLeftToRight() {
+        return upperLipAreaLeftToRight;
+    }
+
     private Vector<Point> rightCorenerToMiddleBot = new Vector<Point>(4);
+
+    public Vector<Point> getLowerLipAreaLeftToRight() {
+        return lowerLipAreaLeftToRight;
+    }
+
     private Vector<Point> leftCorenerToMiddleBot = new Vector<Point>(4);
     private static final double SCALER = 1000;
 
