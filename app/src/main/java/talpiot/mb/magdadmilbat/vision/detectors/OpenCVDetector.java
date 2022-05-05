@@ -1,36 +1,26 @@
 package talpiot.mb.magdadmilbat.vision.detectors;
 import static talpiot.mb.magdadmilbat.vision.VisionMaster.getInstance;
 
-import com.google.mediapipe.formats.proto.LandmarkProto;
-import com.google.mediapipe.framework.TextureFrame;
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
 
-import org.opencv.android.BaseLoaderCallback;
 import org.opencv.core.Core;
 import org.opencv.core.CvException;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
-
-import org.opencv.core.Mat;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.Log;
 
 import org.opencv.android.Utils;
-import org.opencv.core.Mat;
-import com.google.mediapipe.framework.TextureFrame;
-import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.core.Scalar;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 
 public class OpenCVDetector {
@@ -74,7 +64,16 @@ public class OpenCVDetector {
         int shift = 0;
 
         MatOfPoint matPt = new MatOfPoint();
-        matPt.fromArray((Point[]) face.getUpperLipAreaLeftToRight().toArray());
+        Vector<talpiot.mb.magdadmilbat.vision.Point> summmedPointsUpper = new Vector<>();
+
+        summmedPointsUpper.addAll(face.getUpperLipAreaLeftToRight());
+        summmedPointsUpper.add(face.getCornerRight());
+        summmedPointsUpper.addAll(face.getRightCorenerToMiddleTop());
+        summmedPointsUpper.add(face.getTop());
+        summmedPointsUpper.addAll(face.getLeftCorenerToMiddleTop());
+        summmedPointsUpper.add(face.getCornerLeft());
+        matPt.fromArray((Point[]) summmedPointsUpper.toArray());
+
         List<MatOfPoint> ppt = new ArrayList<MatOfPoint>();
         ppt.add(matPt);
         Imgproc.fillPoly(cropImage,
@@ -84,7 +83,16 @@ public class OpenCVDetector {
                 shift,
                 new Point(0,0) );
 
-        matPt.fromArray((Point[]) face.getLowerLipAreaLeftToRight().toArray());
+        Vector<talpiot.mb.magdadmilbat.vision.Point> summmedPointsLower = new Vector<>();
+
+        summmedPointsLower.addAll(face.getLowerLipAreaLeftToRight());
+        summmedPointsLower.add(face.getCornerRight());
+        summmedPointsLower.addAll(face.getRightCorenerToMiddleBot());
+        summmedPointsLower.add(face.getBot());
+        summmedPointsLower.addAll(face.getLeftCorenerToMiddleBot());
+        summmedPointsLower.add(face.getCornerRight());
+        matPt.fromArray((Point[]) summmedPointsLower.toArray());
+
         ppt = new ArrayList<MatOfPoint>();
         ppt.add(matPt);
         Imgproc.fillPoly(cropImage,
