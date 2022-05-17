@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">дай улыбку 0.3</string>
+    <string name="difficulty">сложность</string>
+    <string name="kiss">поцелуй</string>
+    <string name="cheek_blow">дутье щек</string>
+    <string name="smile">улыбка</string>
+    <string name="open_mouth">открыть рот</string>
+    <string name="symmery_level">уровень симметрии</string>
+    <string name="start_exr">начать упражнение</string>
+    <string name="history">история</string>
+    <string name="settings">настройки</string>
+    <string name="save">сохранить</string>
+    <string name="relax_command">расслабляйтесь...</string>
+</resources>

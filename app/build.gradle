@@ -42,4 +42,6 @@ dependencies {
     // Optional: MediaPipe Face Mesh Solution.
     implementation 'com.google.mediapipe:facemesh:latest.release'
 
+    implementation 'com.liihuu.widget:progressbar:1.2.0'
+
 }

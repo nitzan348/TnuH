@@ -5,6 +5,8 @@ import android.content.Intent;
 
 import android.media.MediaPlayer;
 import android.graphics.drawable.AnimationDrawable;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
@@ -20,6 +23,13 @@ import com.plattysoft.leonids.ParticleSystem;
 
 import java.io.IOException;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import talpiot.mb.magdadmilbat.database.HistoryDatabaseManager;
+import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.vision.VisionMaster;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 
@@ -29,19 +39,13 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
      * Tag for logging
      */
     private static final String TAG = "EXR";
-
     private static final int CAMERA_ID = 1;
-
     private VisionMaster vision;
+    private boolean stopThread;
 
     private Button btnBack;
-    private TextView tvRepetition, tvExercise;
-    private boolean stopThread;
     private int reps;
 
-
-
-    AnimationDrawable starAnimation;
 
     private void showConffetti() {
         new ParticleSystem(this, 200, R.drawable.confeti2, 10000)
@@ -69,17 +73,28 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         ting.start();
     }
 
+    private String exerciseName;
+    private SharedPreferences sp;
+    private HistoryDatabaseManager dbManager;
 
+    private DateTimeFormatter dtf;
+    private LocalDateTime now;
+    private Instant start, end;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_page);
 
-        btnBack = findViewById(R.id.btnBack);
-        tvRepetition = findViewById(R.id.tvRepetition);
-        tvExercise = findViewById(R.id.tvExercise);
+        start = Instant.now();
+
+        btnBack = (Button) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
-        tvExercise.setText(getIntent().getStringExtra("exercise"));
+
+        exerciseName = getIntent().getStringExtra("exercise");
+        sp = getSharedPreferences(getIntent().getStringExtra("exercise sp"), 0);
+        dbManager = new HistoryDatabaseManager(this);
 
         // I'm pretty sure only one of those lines is needed, but better safe than sorry
         PermissionHelper.checkAndRequestCameraPermissions(this);
@@ -90,16 +105,33 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         vision.attachFrame(findViewById(R.id.preview_display_layout));
 
         this.reps = 0;
+
+        dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        now = LocalDateTime.now();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View view) {
-        if (view == btnBack) {
-            Intent intent = new Intent(this, MainActivity.class);
+        if (view == btnBack)
+        {
+            end = Instant.now();
+
+            dbManager.addTraining(getCurrentTraining());
+            Intent intent = new Intent(this, ExrChoiceScreen.class);
             startActivity(intent);
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onBackPressed() {
+        end = Instant.now();
+
+        dbManager.addTraining(getCurrentTraining());
+        Intent intent = new Intent(this, ExrChoiceScreen.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onRequestPermissionsResult(
@@ -120,7 +152,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                 @SuppressLint("DefaultLocale")
                 @Override
                 public void run() {
-                    TextView txt = findViewById(R.id.exerciseQualDisplay);
+                    TextView repCounter = findViewById(R.id.exerciseQualDisplay);
+                    TextView commandDisplayer = findViewById(R.id.commandToDo);
                     while (!stopThread) {
                         try {
                             Thread.sleep(200);
@@ -130,8 +163,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                         if (vision.getCurrentFace() != null) {
                             IMouth mouth = vision.getCurrentFace().getMouth();
 
-                            runOnUiThread(() -> txt.setText(
-                                    String.format("reps done: %d",
+                            runOnUiThread(() -> repCounter.setText(
+                                    String.format("%d",
                                             reps)
                             ));
 
@@ -139,6 +172,14 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
                                 reps += 1;
                                 runOnUiThread(() -> showConffetti());
                                 playTing();
+                                runOnUiThread(() -> {
+                                    commandDisplayer.setText(getString(R.string.relax_command));
+                                });
+                            }
+                            if (VisionMaster.getInstance().isRestingFace()) {
+                                runOnUiThread(() -> {
+                                    commandDisplayer.setText("");
+                                });
                             }
 
                             Log.i(TAG, mouth.toString());
@@ -149,7 +190,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         } else {
             PermissionHelper.checkAndRequestCameraPermissions(this);
         }
-
     }
 
     @Override
@@ -158,4 +198,20 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         stopThread = true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public TrainingData getCurrentTraining()
+    {
+        long millis = Duration.between(start, end).toMillis();
+        String[] datetime = dtf.format(now).split(" ", 2);
+        return new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis), reps);
+    }
+
+    @SuppressLint("DefaultLocale")
+    public String convertDurationTime(long millis)
+    {
+        long seconds = millis / 1000;
+        if (seconds % 60 < 10)
+            return String.format("%d:0%d", seconds / 60, seconds % 60);
+        return String.format("%d:%d", seconds / 60, seconds % 60);
+    }
 }

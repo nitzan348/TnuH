@@ -30,7 +30,10 @@
             android:exported="false" />
         <activity
             android:name="talpiot.mb.magdadmilbat.ExrChoiceScreen"
-            android:exported="false" />
+            android:exported="true"/>
+        <activity
+            android:name="talpiot.mb.magdadmilbat.SettingsChoiceScreen"
+            android:exported="false"/>
         <activity
             android:name="talpiot.mb.magdadmilbat.MainActivity"
             android:exported="true">

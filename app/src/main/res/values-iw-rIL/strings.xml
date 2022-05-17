@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">תנו חיוך 0.1</string>
-    <string name="no_camera_access" translatable="false">בבקשה תאשרו הרשאות מצלמה</string>
-    <string name="difficulty">רמת קושי:</string>
+    <string name="app_name">תנו חיוך 0.3</string>
+    <string name="difficulty">רמת קושי</string>
+    <string name="kiss">נשיקה</string>
+    <string name="cheek_blow">ניפוח לחיים</string>
+    <string name="smile">חיוך</string>
+    <string name="open_mouth">פתיחת פה</string>
+    <string name="symmery_level">רמת סימטריה</string>
+    <string name="start_exr">התחל תרגיל</string>
+    <string name="history">היסטוריה</string>
+    <string name="settings">הגדרות</string>
+    <string name="save">שמור</string>
+    <string name="relax_command">תרפו...</string>
 </resources>

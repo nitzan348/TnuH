@@ -18,7 +18,7 @@ import com.example.MagdadMilbat.R;
 
 public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
     Button btnBack, btnSave;
-    SeekBar sbLevel, sbRepetition;
+    SeekBar sbDiff, sbSymmDiff;
     TextView tvExercise, tvLevelNumber, tvRepetitionNumber;
     EditText etDuration;
     SharedPreferences sp;
@@ -36,8 +36,8 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
         btnBack = (Button)findViewById(R.id.btnBack);
         btnSave = (Button)findViewById(R.id.btnSave);
 
-        sbLevel = (SeekBar)findViewById(R.id.sbLevel);
-        sbRepetition = (SeekBar)findViewById(R.id.sbRepetition);
+        sbDiff = (SeekBar)findViewById(R.id.sbLevel);
+        sbSymmDiff = (SeekBar)findViewById(R.id.sbSymmDiff);
         tvLevelNumber = (TextView)findViewById(R.id.tvLevelNumber);
         tvRepetitionNumber = (TextView)findViewById(R.id.tvRepetitionNumber);
         etDuration = (EditText)findViewById(R.id.etDuration);
@@ -45,12 +45,12 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
         btnBack.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
-        sbLevel.setOnSeekBarChangeListener(this);
-        sbRepetition.setOnSeekBarChangeListener(this);
-        sbLevel.setMin(1);
-        sbRepetition.setMin(1);
-        sbLevel.setMax(10);
-        sbRepetition.setMax(10);
+        sbDiff.setOnSeekBarChangeListener(this);
+        sbSymmDiff.setOnSeekBarChangeListener(this);
+        sbDiff.setMin(1);
+        sbSymmDiff.setMin(1);
+        sbDiff.setMax(100);
+        sbSymmDiff.setMax(100);
 
         sp = getSharedPreferences(getIntent().getStringExtra("exercise sp"), 0);
         loadSP(sp);
@@ -61,7 +61,7 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
     {
         if (view == btnBack)
         {
-            Intent intent = new Intent(this, SettingsChoiceScreen.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
         else if (view == btnSave)
@@ -72,12 +72,12 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        if (seekBar == sbLevel)
+        if (seekBar == sbDiff)
         {
             tvLevelNumber.setText(String.valueOf(i));
             level = i;
         }
-        else if (seekBar == sbRepetition)
+        else if (seekBar == sbSymmDiff)
         {
             tvRepetitionNumber.setText(String.valueOf(i));
             repetition = i;
@@ -86,19 +86,19 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
 
     public void loadSP(SharedPreferences sp)
     {
-        sbLevel.setProgress(Integer.parseInt(sp.getString("level", "1")));
-        sbRepetition.setProgress(Integer.parseInt(sp.getString("repetition", "1")));
+        sbDiff.setProgress(Integer.parseInt(sp.getString("diff", "1")));
+        sbSymmDiff.setProgress(Integer.parseInt(sp.getString("sym_diff", "1")));
         etDuration.setText(sp.getString("duration", null));
     }
 
     public void saveSP(SharedPreferences sp)
     {
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("level", String.valueOf(level));
-        editor.putString("repetition", String.valueOf(repetition));
+        editor.putString("diff", String.valueOf(level));
+        editor.putString("sym_diff", String.valueOf(repetition));
         editor.putString("duration", etDuration.getText().toString());
         editor.apply();
-        Toast.makeText(this, "ההגדרות נשמרו", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "ההגדרות נשמרו", Toast.LENGTH_SHORT).show();
     }
 
     @Override
