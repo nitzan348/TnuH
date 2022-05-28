@@ -78,7 +78,7 @@ public class SimpleMouth implements IMouth {
         upperLipAreaLeftToRight.add(new Point(face.getLandmark(207)));
         upperLipAreaLeftToRight.add(new Point(face.getLandmark(206)));
         upperLipAreaLeftToRight.add(new Point(face.getLandmark(203)));
-        upperLipAreaLeftToRight.add(new Point(face.getLandmark;
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(48)));
         upperLipAreaLeftToRight.add(new Point(face.getLandmark(97)));
         upperLipAreaLeftToRight.add(new Point(face.getLandmark(2)));
         upperLipAreaLeftToRight.add(new Point(face.getLandmark(326)));

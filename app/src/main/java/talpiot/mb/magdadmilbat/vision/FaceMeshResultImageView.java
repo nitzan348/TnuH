@@ -89,7 +89,7 @@ public class FaceMeshResultImageView extends AppCompatImageView {
         Mat tmp = new Mat(height, width, CvType.CV_8U, new Scalar(4));
 //        Imgproc.cvtColor(tst, tmp, Imgproc.COLOR_GRAY2RGBA, 4);
         bmp = Bitmap.createBitmap(tmp.cols(), tmp.rows(), Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(tmp, bmp);
+        Utils.matToBitmap(tst, bmp);
         latest = bmp;
         bmInput = bmp;
 //        // --------------------

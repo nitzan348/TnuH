@@ -62,18 +62,24 @@ public class OpenCVDetector {
     }
 
     public Mat CropLips(Mat cropImage, SimpleMouth face) {
+        Mat paintedMouthArea = this.CropLipsLower(cropImage, face);
+        paintedMouthArea = this.CropLipsUpper(paintedMouthArea, face);
+        return  paintedMouthArea;
+    }
+
+    public Mat CropLipsUpper(Mat cropImage, SimpleMouth face) {
         int lineType = 8;
         int shift = 0;
 
         MatOfPoint matPt = new MatOfPoint();
         Vector<talpiot.mb.magdadmilbat.vision.Point> summmedPointsUpper = new Vector<>();
 
-//        summmedPointsUpper.addAll(face.getUpperLipAreaLeftToRight());
+        //summmedPointsUpper.addAll(face.getUpperLipAreaLeftToRight());
         summmedPointsUpper.add(face.getCornerRight());
         summmedPointsUpper.addAll(face.getRightCorenerToMiddleTop());
         summmedPointsUpper.add(face.getTop());
-//        summmedPointsUpper.addAll(face.getLeftCorenerToMiddleTop());
-//        summmedPointsUpper.add(face.getCornerLeft());
+        //summmedPointsUpper.addAll(face.getLeftCorenerToMiddleTop());
+        //summmedPointsUpper.add(face.getCornerLeft());
 
         Vector<Point> upperAsPt = new Vector<>();
         for (talpiot.mb.magdadmilbat.vision.Point p : summmedPointsUpper) {
@@ -92,6 +98,14 @@ public class OpenCVDetector {
                 shift,
                 new Point(0,0) );
 
+        return cropImage;
+    }
+
+    public Mat CropLipsLower(Mat cropImage, SimpleMouth face) {
+        int lineType = 8;
+        int shift = 0;
+
+        MatOfPoint matPt = new MatOfPoint();
         Vector<talpiot.mb.magdadmilbat.vision.Point> summmedPointsLower = new Vector<>();
 
         summmedPointsLower.addAll(face.getLowerLipAreaLeftToRight());
@@ -106,17 +120,18 @@ public class OpenCVDetector {
             lowerAsPt.add(new Point(p.getX(), p.getY()));
         }
 
+        List<MatOfPoint> ppt = new ArrayList<MatOfPoint>();
         Point[] pparr = new Point[lowerAsPt.size()];
         matPt.fromArray(lowerAsPt.toArray(pparr));
 
         ppt = new ArrayList<MatOfPoint>();
-//        ppt.add(matPt);
-//        Imgproc.fillPoly(cropImage,
-//                ppt,
-//                new Scalar( 0,0,0 ),
-//                lineType,
-//                shift,
-//                new Point(0,0) );
+        ppt.add(matPt);
+        Imgproc.fillPoly(cropImage,
+                ppt,
+                new Scalar( 0,0,0 ),
+                lineType,
+                shift,
+                new Point(0,0) );
 
         return cropImage;
     }
