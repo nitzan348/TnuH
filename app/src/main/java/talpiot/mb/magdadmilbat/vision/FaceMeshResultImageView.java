@@ -79,20 +79,20 @@ public class FaceMeshResultImageView extends AppCompatImageView {
         latest = Bitmap.createBitmap(width, height, bmInput.getConfig());
 
 //        // test
-//        OpenCVDetector testing = new OpenCVDetector();
-//        Mat tst = testing.thresholdTongue(
-//
-//                testing.getCroppedPicture(testing.faceMashToCVFrame(result),
-//                        (SimpleMouth) VisionMaster.getInstance().getCurrentFace().getMouth()));
-//        width = tst.width();
-//        height = tst.height();
-//        Bitmap bmp = null;
-//        Mat tmp = new Mat(height, width, CvType.CV_8U, new Scalar(4));
-//        Imgproc.cvtColor(tst, tmp, Imgproc.COLOR_GRAY2RGBA, 4);
-//        bmp = Bitmap.createBitmap(tmp.cols(), tmp.rows(), Bitmap.Config.ARGB_8888);
-//        Utils.matToBitmap(tmp, bmp);
-//        latest = bmp;
-//        bmInput = bmp;
+        OpenCVDetector testing = new OpenCVDetector();
+        Mat tst = testing.thresholdTongue(
+
+                testing.getCroppedPicture(testing.faceMashToCVFrame(result),
+                        (SimpleMouth) VisionMaster.getInstance().getCurrentFace().getMouth()));
+        width = tst.width();
+        height = tst.height();
+        Bitmap bmp = null;
+        Mat tmp = new Mat(height, width, CvType.CV_8U, new Scalar(4));
+        Imgproc.cvtColor(tst, tmp, Imgproc.COLOR_GRAY2RGBA, 4);
+        bmp = Bitmap.createBitmap(tmp.cols(), tmp.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(tmp, bmp);
+        latest = bmp;
+        bmInput = bmp;
 //        // --------------------
 
         Canvas canvas = new Canvas(latest);
