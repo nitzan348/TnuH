@@ -1,4 +1,6 @@
 package talpiot.mb.magdadmilbat.vision.detectors;
+import static talpiot.mb.magdadmilbat.vision.VisionMaster.HEIGHT;
+import static talpiot.mb.magdadmilbat.vision.VisionMaster.WIDTH;
 import static talpiot.mb.magdadmilbat.vision.VisionMaster.getInstance;
 
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
@@ -66,13 +68,20 @@ public class OpenCVDetector {
         MatOfPoint matPt = new MatOfPoint();
         Vector<talpiot.mb.magdadmilbat.vision.Point> summmedPointsUpper = new Vector<>();
 
-        summmedPointsUpper.addAll(face.getUpperLipAreaLeftToRight());
+//        summmedPointsUpper.addAll(face.getUpperLipAreaLeftToRight());
         summmedPointsUpper.add(face.getCornerRight());
         summmedPointsUpper.addAll(face.getRightCorenerToMiddleTop());
         summmedPointsUpper.add(face.getTop());
-        summmedPointsUpper.addAll(face.getLeftCorenerToMiddleTop());
-        summmedPointsUpper.add(face.getCornerLeft());
-        matPt.fromArray((Point[]) summmedPointsUpper.toArray());
+//        summmedPointsUpper.addAll(face.getLeftCorenerToMiddleTop());
+//        summmedPointsUpper.add(face.getCornerLeft());
+
+        Vector<Point> upperAsPt = new Vector<>();
+        for (talpiot.mb.magdadmilbat.vision.Point p : summmedPointsUpper) {
+            upperAsPt.add(new Point(p.getX()/WIDTH, p.getY()/HEIGHT));
+        }
+
+        Point[] parr = new Point[upperAsPt.size()];
+        matPt.fromArray(upperAsPt.toArray(parr));
 
         List<MatOfPoint> ppt = new ArrayList<MatOfPoint>();
         ppt.add(matPt);
@@ -91,16 +100,23 @@ public class OpenCVDetector {
         summmedPointsLower.add(face.getBot());
         summmedPointsLower.addAll(face.getLeftCorenerToMiddleBot());
         summmedPointsLower.add(face.getCornerRight());
-        matPt.fromArray((Point[]) summmedPointsLower.toArray());
+
+        Vector<Point> lowerAsPt = new Vector<>();
+        for (talpiot.mb.magdadmilbat.vision.Point p : summmedPointsLower) {
+            lowerAsPt.add(new Point(p.getX(), p.getY()));
+        }
+
+        Point[] pparr = new Point[lowerAsPt.size()];
+        matPt.fromArray(lowerAsPt.toArray(pparr));
 
         ppt = new ArrayList<MatOfPoint>();
-        ppt.add(matPt);
-        Imgproc.fillPoly(cropImage,
-                ppt,
-                new Scalar( 0,0,0 ),
-                lineType,
-                shift,
-                new Point(0,0) );
+//        ppt.add(matPt);
+//        Imgproc.fillPoly(cropImage,
+//                ppt,
+//                new Scalar( 0,0,0 ),
+//                lineType,
+//                shift,
+//                new Point(0,0) );
 
         return cropImage;
     }
