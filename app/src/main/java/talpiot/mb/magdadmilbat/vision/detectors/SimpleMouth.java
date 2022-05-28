@@ -14,10 +14,39 @@ import java.util.*;
 public class SimpleMouth implements IMouth {
 
     private Point cornerRight, cornerLeft, top, bot, faceTop, faceBot;
+
+    public Vector<Point> getRightCorenerToMiddleBot() {
+        return rightCorenerToMiddleBot;
+    }
+    private Vector<Point> upperLipAreaLeftToRight = new Vector<Point>(13);
+    private Vector<Point> lowerLipAreaLeftToRight = new Vector<Point>(13);
+
     //Added saved points.
     private Vector<Point> rightCorenerToMiddleTop = new Vector<Point>(4);
     private Vector<Point> leftCorenerToMiddleTop = new Vector<Point>(4);
+
+    public Vector<Point> getRightCorenerToMiddleTop() {
+        return rightCorenerToMiddleTop;
+    }
+
+    public Vector<Point> getLeftCorenerToMiddleTop() {
+        return leftCorenerToMiddleTop;
+    }
+
+    public Vector<Point> getLeftCorenerToMiddleBot() {
+        return leftCorenerToMiddleBot;
+    }
+
+    public Vector<Point> getUpperLipAreaLeftToRight() {
+        return upperLipAreaLeftToRight;
+    }
+
     private Vector<Point> rightCorenerToMiddleBot = new Vector<Point>(4);
+
+    public Vector<Point> getLowerLipAreaLeftToRight() {
+        return lowerLipAreaLeftToRight;
+    }
+
     private Vector<Point> leftCorenerToMiddleBot = new Vector<Point>(4);
     private static final double SCALER = 1000;
 
@@ -44,6 +73,34 @@ public class SimpleMouth implements IMouth {
         rightCorenerToMiddleBot.add(new Point(face.getLandmark((321))));
         rightCorenerToMiddleBot.add(new Point(face.getLandmark((405))));
         rightCorenerToMiddleBot.add(new Point(face.getLandmark((314))));
+
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(214)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(207)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(206)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(203)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(48)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(97)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(2)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(326)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(327)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(423)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(426)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(436)));
+        upperLipAreaLeftToRight.add(new Point(face.getLandmark(434)));
+
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(214)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(210)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(211)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(32)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(208)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(199)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(428)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(262)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(431)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(430)));
+        lowerLipAreaLeftToRight.add(new Point(face.getLandmark(434)));
+
+
 
         cornerLeft = new Point(face.getLandmark(61));
         cornerRight = new Point(face.getLandmark(291));
