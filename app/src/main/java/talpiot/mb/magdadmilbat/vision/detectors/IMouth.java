@@ -66,7 +66,7 @@ public interface IMouth {
     }
 
     /**
-     * @return ration of height by width of mouth
+     * @return ration of height by width of mouth - In score units
      */
     default double getHeightWidthRatio() {
         return (getHeight() / getWidth()) * 100; //Success rates for a kiss

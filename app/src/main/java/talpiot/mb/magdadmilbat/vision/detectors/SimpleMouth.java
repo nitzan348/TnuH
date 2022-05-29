@@ -11,6 +11,7 @@ import talpiot.mb.magdadmilbat.vision.symmetry.DynamicMouthSymmetryCalculator;
  */
 public class SimpleMouth implements IMouth {
 
+    //Important specific points of the face
     private Point cornerRight, cornerLeft, LipsMiddleTop, LipsMiddleBot, faceTop, faceBot;
     private DynamicMouthSymmetryCalculator dynamicMouthSymmetryCalculator;
 
