@@ -9,14 +9,14 @@ public class TrainingData {
     private String date;
     private String time; // Training start time
     private String exerciseDescription;
-    private String duration; // duration that the Training take
+    // private String duration; // duration that the Training take
     private int repetition; // number of times the user repeat exercise
 
     public TrainingData(String date, String time, String exerciseDescription, String duration, int repetition) {
         this.date = date;
         this.time = time;
         this.exerciseDescription = exerciseDescription;
-        this.duration = duration;
+        // this.duration = duration;
         this.repetition = repetition;
     }
 

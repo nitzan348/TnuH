@@ -12,4 +12,6 @@
     <string name="settings">הגדרות</string>
     <string name="save">שמור</string>
     <string name="relax_command">תרפו...</string>
+    <string name="good_job">עבודה טובה!</string>
+    <string name="back">חזרה</string>
 </resources>
