@@ -65,8 +65,7 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
             startActivity(intent);
         }
         else if (view == btnSave)
-        {
-            saveSP(sp);
+        {            saveSP(sp);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
