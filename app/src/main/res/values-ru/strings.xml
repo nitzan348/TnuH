@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">дай улыбку 0.3</string>
+    <string name="app_name">дай улыбку 1.0</string>
     <string name="difficulty">сложность</string>
     <string name="kiss">поцелуй</string>
     <string name="cheek_blow">дутье щек</string>
@@ -12,6 +12,6 @@
     <string name="settings">настройки</string>
     <string name="save">сохранить</string>
     <string name="relax_command">расслабляйтесь...</string>
-    <string name="good_job">Good Job!</string>
-    <string name="back">Back</string>
+    <string name="good_job">молодцы!</string>
+    <string name="back">назад</string>
 </resources>

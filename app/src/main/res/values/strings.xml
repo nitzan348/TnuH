@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tnu Hiuch 0.3</string>
+    <string name="app_name">Tnu Hiuch 1.0</string>
     <string name="no_camera_access" translatable="false">please grant camera permissions</string>
     <string name="difficulty">difficulty</string>
     <string name="kiss">kiss</string>

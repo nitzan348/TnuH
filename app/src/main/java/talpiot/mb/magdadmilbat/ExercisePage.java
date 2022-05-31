@@ -154,7 +154,7 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         LocalDate dateObj = LocalDate.now();
         TrainingData exerciseObj = new TrainingData(
                 dateObj.toString(),
-                VisionMaster.getInstance().getCurrentExr().name(),
+                VisionMaster.getInstance().getCurrentExr().get_name(),
                 String.format("%d - %d", diff, symm),
                 reps);
         HistoryDatabaseManager dbObj = new HistoryDatabaseManager(this);
