@@ -41,7 +41,7 @@ public class HistoryDatabaseManager extends SQLiteOpenHelper {
     public void addTraining(TrainingData training) {
         String sql = "insert into Training(exerciseDescription, date, time, duration, repetition) values ('" +
                 training.getExerciseDescription() + "',  '" + training.getDate() + "', '" + training.getTime()
-                + "', '" + training.getDuration() + "', '" + training.getRepetition() + "')";
+                + "', '" + training.getDifficulty() + "', " + training.getRepetition() + ")";
         SQLiteDatabase sqLiteDatabase = getWritableDatabase(); // Open connection.
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close(); // Close connection.
@@ -53,16 +53,15 @@ public class HistoryDatabaseManager extends SQLiteOpenHelper {
      **/
     private static TrainingData getTraining(Cursor cursor) {
         int dateI = cursor.getColumnIndex("date");
-        int timeI = cursor.getColumnIndex("time");
         int durationI = cursor.getColumnIndex("duration");
         int exerciseDescriptionI = cursor.getColumnIndex("exerciseDescription");
         int repetition = cursor.getColumnIndex("repetition");
         String duration = cursor.getString(durationI);
         String exerciseDescription = cursor.getString(exerciseDescriptionI);
         String date = cursor.getString(dateI);
-        String time = cursor.getString(timeI);
+        int rep_real = cursor.getInt(repetition);
 
-        return new TrainingData(date, time, exerciseDescription, duration, repetition);
+        return new TrainingData(date, exerciseDescription, duration, rep_real);
 
     }
 

@@ -25,8 +25,11 @@ import java.io.IOException;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import talpiot.mb.magdadmilbat.database.HistoryDatabaseManager;
 import talpiot.mb.magdadmilbat.database.TrainingData;
@@ -117,7 +120,8 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
         {
             end = Instant.now();
 
-            dbManager.addTraining(getCurrentTraining());
+            saveDate();
+
             Intent intent = new Intent(this, ExrChoiceScreen.class);
             startActivity(intent);
         }
@@ -128,9 +132,34 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         end = Instant.now();
 
-        dbManager.addTraining(getCurrentTraining());
+        saveDate();
+
         Intent intent = new Intent(this, ExrChoiceScreen.class);
         startActivity(intent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void saveDate() {
+
+        if (reps <= 0) {
+            return;
+        }
+
+        VisionMaster.Exercise curr = VisionMaster.getInstance().getCurrentExr();
+        int diff = Integer.parseInt(getSharedPreferences(curr.name(), 0)
+                .getString("diff", "1"));
+        int symm = Integer.parseInt(getSharedPreferences(curr.name(), 0)
+                .getString("sym_diff", "1"));
+
+        LocalDate dateObj = LocalDate.now();
+        TrainingData exerciseObj = new TrainingData(
+                dateObj.toString(),
+                VisionMaster.getInstance().getCurrentExr().name(),
+                String.format("%d - %d", diff, symm),
+                reps);
+        HistoryDatabaseManager dbObj = new HistoryDatabaseManager(this);
+        dbObj.addTraining(exerciseObj);
+
     }
 
     @Override
@@ -196,14 +225,6 @@ public class ExercisePage extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
         stopThread = true;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public TrainingData getCurrentTraining()
-    {
-        long millis = Duration.between(start, end).toMillis();
-        String[] datetime = dtf.format(now).split(" ", 2);
-        return new TrainingData(datetime[0], datetime[1], exerciseName, convertDurationTime(millis), reps);
     }
 
     @SuppressLint("DefaultLocale")

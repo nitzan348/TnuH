@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.MagdadMilbat.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 
 import talpiot.mb.magdadmilbat.database.HistoryDatabaseManager;
@@ -32,9 +35,14 @@ public class HistoryPage extends AppCompatActivity implements View.OnClickListen
         historyManager = new HistoryDatabaseManager(this);
         btnBack = (Button)findViewById(R.id.btnBack);
 
-        trainingDataAdapter = new TrainingDataAdapter(this, historyManager.getAllTraining());
-        lvHistory = (ListView)findViewById(R.id.lvHistory);
+        ArrayList<TrainingData> his =  historyManager.getAllTraining();
+        Collections.reverse(his);
 
+        trainingDataAdapter = new TrainingDataAdapter(this,
+                R.layout.activity_exercise_details,
+                his);
+
+        lvHistory = (ListView)findViewById(R.id.lvHistory);
         lvHistory.setAdapter(trainingDataAdapter);
         btnBack.setOnClickListener(this);
     }
