@@ -210,6 +210,9 @@ public class VisionMaster extends Thread {
     public void setCurrentExr(Exercise currentExr) {
         this.currentExr = currentExr;
     }
+    public Exercise getCurrentExr() {
+        return this.currentExr;
+    }
 
     /**
      * function deals with all score system -> three flags as class flags
