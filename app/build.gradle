@@ -41,8 +41,8 @@ dependencies {
     implementation 'com.google.flogger:flogger:latest.release'
     implementation 'com.google.flogger:flogger-system-backend:latest.release'
     implementation 'com.google.code.findbugs:jsr305:latest.release'
-    implementation 'com.google.guava:guava:27.0.1-android'
-    implementation 'com.google.protobuf:protobuf-javalite:3.19.1'
+    implementation 'com.google.guava:guava:latest.release'
+    implementation 'com.google.protobuf:protobuf-javalite:latest.release'
     // CameraX core library
     def camerax_version = "1.0.0-beta10"
     implementation "androidx.camera:camera-core:$camerax_version"
@@ -52,5 +52,8 @@ dependencies {
     def auto_value_version = "1.8.1"
     implementation "com.google.auto.value:auto-value-annotations:$auto_value_version"
     annotationProcessor "com.google.auto.value:auto-value:$auto_value_version"
-
+    // Transport
+    implementation 'com.google.android.datatransport:transport-runtime:3.0.0'
+    implementation 'com.google.android.datatransport:transport-api:3.0.0'
+    implementation 'com.google.android.datatransport:transport-backend-cct:3.0.0'
 }
