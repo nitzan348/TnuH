@@ -47,6 +47,7 @@ public interface IMouth {
      */
     double getSymmetryCoef();
 
+
     /**
      *
      * @return Get the area of the lips
@@ -58,19 +59,25 @@ public interface IMouth {
 
     /**
      *
-     * @param input Some quality parameters
-     * @return New quality parameter that takes into account symmetry
+     * @return Get the score for the "open mouth wide" exercise
      */
-    default double enforceSymmetry(double input) {
-        return 0.5 * input - 0.5 * getSymmetryCoef();
+    default double getBigMouthScore() {
+        return getArea() / (getHeightNormalizer() * getWidthNormalizer());
+    }
+
+    /**
+     * @return ration of height by width of mouth - In score units
+     */
+    default double getHeightWidthRatio() {
+        return (getHeight() / getWidth()) * 100; //Success rates for a kiss
     }
 
     /**
      *
-     * @return Get the score for the "open mouth wide" exercise
+     * @return number representing the success of a kiss
      */
-    default double getBigMouthScore() {
-        return enforceSymmetry(getArea() / (getHeightNormalizer() * getWidthNormalizer()));
+    default double getKissScore() {
+        return getHeightWidthRatio();
     }
 
     /**
@@ -78,6 +85,6 @@ public interface IMouth {
      * @return Get the score for the "smile wide exercise
      */
     default double getSmileScore() {
-        return enforceSymmetry(getWidth() / getWidthNormalizer());
+        return getWidth() / getWidthNormalizer();
     }
 }

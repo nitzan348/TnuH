@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.MagdadMilbat.R;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,32 +21,35 @@ import java.util.List;
 public class TrainingDataAdapter extends ArrayAdapter<TrainingData> {
     private Context context;
     private List<TrainingData> data;
-    private DatabaseManager manager;
+    private int res;
 
-    public TrainingDataAdapter(Context context) {
+    public TrainingDataAdapter(Context context, int res, ArrayList<TrainingData> details) {
         super(context,
-                0,
-                0,
-                new DatabaseManager(context).getAllTraining());
+                res,
+                details);
         this.context = context;
-        this.manager = new DatabaseManager(context);
-        this.data = manager.getAllTraining();
+        this.data = details;
+        this.res = res;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
-        @SuppressLint("ViewHolder") View view = layoutInflater.inflate(R.layout.activity_exercise_details, parent, false);
 
-        TextView tvExercise = (TextView) view.findViewById(R.id.tvExercise);
-        TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
-        TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        convertView = inflater.inflate(res, parent, false);
 
-        TrainingData temp = data.get(position);
-        tvExercise.setText(temp.toString());
+        TextView tvExercise = (TextView) convertView.findViewById(R.id.exrType);
+        TextView tvDate = (TextView) convertView.findViewById(R.id.date);
+        TextView tvDifficulty = (TextView) convertView.findViewById(R.id.diff);
+        TextView tvRepetition = (TextView) convertView.findViewById(R.id.reps);
+
+        TrainingData temp = getItem(position);
+        tvExercise.setText(temp.getExerciseDescription());
         tvDate.setText(temp.getDate());
-        tvTime.setText(temp.getTime());
+        tvDifficulty.setText(temp.getDifficulty());
+        tvRepetition.setText(String.format("%d", temp.getRepetition())); // this isn't actually functional because the DB needs to be restarted
 
-        return view;
+        return convertView;
     }
 }

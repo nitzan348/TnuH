@@ -9,18 +9,14 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import com.example.MagdadMilbat.R;
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.solutioncore.CameraInput;
 import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.function.Supplier;
 
-import talpiot.mb.magdadmilbat.database.DatabaseManager;
-import talpiot.mb.magdadmilbat.database.TrainingData;
 import talpiot.mb.magdadmilbat.vision.detectors.IMouth;
 import talpiot.mb.magdadmilbat.vision.detectors.SimpleMouth;
 
@@ -48,6 +44,8 @@ public class VisionMaster extends Thread {
     private FaceMesh faceMesh;
     private FaceMeshResultImageView imageView;
 
+    private Context context;
+
     /**
      * Width and height parameters for the CameraInput object.
      * I'm not sure what they do, my best guess is they define the frame dimensions returned
@@ -56,17 +54,102 @@ public class VisionMaster extends Thread {
     public static final int WIDTH = 960, HEIGHT = 720;
 
     private DecomposedFace currentFace;
+    private Exercise currentExr;
 
-    private VisionMaster() {
+    /**
+     * flags to define current face state during practice.
+     * counter to define how many rehearsals user made.
+     */
+    private boolean restingFace = false;
+
+    public enum Exercise {
+
+        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(),
+                0.42, 0.315, 0.035,
+                R.string.smile),
+        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(),
+                0.35, 0.1, 0.035, R.string.open_mouth),
+        KISS(() -> VisionMaster.getInstance().currentFace.getMouth().getKissScore(),
+                100, 40, 0.035, R.string.kiss);
+
+        private final Supplier<Double> valSup;
+        private double restingMaximumScore, actingMinimumScore, maximumSymmetry;
+        private int prettyName;
+
+        Exercise(Supplier<Double> valueSupplier, double actingMin, double restingMax, double maxSym,
+                 int name) {
+            this.valSup = valueSupplier;
+            setActingMinimumScore(actingMin);
+            setRestingMaximumScore(restingMax);
+            setMaximumSymmetry(maxSym);
+            prettyName = name;
+        }
+
+        public String get_name() {
+            return VisionMaster.getInstance().context.getResources().getString(prettyName);
+        }
+
+        public double getActualActingMin() {
+
+            double difficulty =
+                    Integer.parseInt(VisionMaster.getInstance().context
+                            .getSharedPreferences(name(), 0)
+                            .getString("diff", "1")) / 100.0;
+
+            double min = restingMaximumScore + (actingMinimumScore - restingMaximumScore) * 0.1; // Arbitrary 10%
+
+            Log.i(VisionMaster.TAG, "min diff = " + min + " ret diff = "
+                    + (min + difficulty * ((actingMinimumScore - min) / 0.8)));
+
+            return min + difficulty * ((actingMinimumScore - min) / 0.8); // 0.8 to have regular human values at 80%
+        }
+
+        public double getActualRestingMax() {
+            return restingMaximumScore;
+        }
+
+        public double getActualMaxSym() {
+            double difficulty =
+                    Integer.parseInt(
+                            VisionMaster.getInstance().context
+                                    .getSharedPreferences(name(), 0)
+                                    .getString("sym_diff", "1")) / 100.0;
+
+            double max = maximumSymmetry * 5; // Arbitrary 500%
+
+            return max - difficulty * (max - 0.8 * maximumSymmetry); // Again arbitrary
+        }
+
+        public double getMaximumSymmetry() {
+            return maximumSymmetry;
+        }
+
+        public void setMaximumSymmetry(double maximumSymmetry) {
+            this.maximumSymmetry = maximumSymmetry;
+        }
+
+        public double get() {
+            return valSup.get();
+        }
+
+        public double getRestingMaximumScore() {
+            return restingMaximumScore;
+        }
+
+        public void setRestingMaximumScore(double restingMaximumScore) {
+            this.restingMaximumScore = restingMaximumScore;
+        }
+
+        public double getActingMinimumScore() {
+            return actingMinimumScore;
+        }
+
+        public void setActingMinimumScore(double actingMinimumScore) {
+            this.actingMinimumScore = actingMinimumScore;
+        }
     }
 
-    public void startNewSession() {
-//        DatabaseManager thread = new DatabaseManager(imageView.getContext());
-//        Date c = Calendar.getInstance().getTime();
-//        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-//        String formattedDate = df.format(c);
-//        TrainingData training(c, );
-//        thread.addTraining(TrainingData training);
+    private VisionMaster() {
     }
 
     public static VisionMaster getInstance() {
@@ -79,6 +162,17 @@ public class VisionMaster extends Thread {
     public DecomposedFace getCurrentFace() {
 
         return currentFace;
+    }
+
+    public double getScore() {
+        if (currentExr != null) {
+            return currentExr.get();
+        }
+        return 0;
+    }
+
+    public double getSymmetryScore() {
+        return currentFace.getMouth().getSymmetryCoef();
     }
 
     public static class DecomposedFace {
@@ -96,6 +190,7 @@ public class VisionMaster extends Thread {
     public void attachToContext(Context context) {
         setupMeshRecognizer(context);
         imageView = new FaceMeshResultImageView(context);
+        this.context = context;
     }
 
     public void attachFrame(@NonNull FrameLayout frame) {
@@ -120,9 +215,35 @@ public class VisionMaster extends Thread {
                 WIDTH, HEIGHT);
     }
 
+    public void setCurrentExr(Exercise currentExr) {
+        this.currentExr = currentExr;
+    }
+    public Exercise getCurrentExr() {
+        return this.currentExr;
+    }
+
     /**
-     * Set's up the FaceMesh object for use
+     * function deals with all score system -> three flags as class flags
+     * that define what state the user is at currently, deals with score comparing
+     * and checks when user's face is resting.
      */
+    public boolean didCompleteRep() {
+
+        if (this.getScore() >= currentExr.getActualActingMin() && this.restingFace
+                && currentExr.getActualMaxSym() > getSymmetryScore()) {
+            this.restingFace = false;
+            return true;
+        }
+        if (this.getScore() <= currentExr.getActualRestingMax()) {
+            this.restingFace = true;
+        }
+        return false;
+    }
+
+    public boolean isRestingFace() {
+        return this.restingFace;
+    }
+
     public void setupMeshRecognizer(Context context) {
         FaceMeshOptions faceMeshOptions =
                 FaceMeshOptions.builder()
