@@ -2,7 +2,6 @@ package talpiot.mb.magdadmilbat.vision;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import com.example.MagdadMilbat.R;
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.solutioncore.CameraInput;
 import com.google.mediapipe.solutions.facemesh.FaceMesh;
@@ -65,20 +65,28 @@ public class VisionMaster extends Thread {
     public enum Exercise {
 
         SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(),
-                0.42, 0.315, 0.035),
+                0.42, 0.315, 0.035,
+                R.string.smile),
         BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(),
-                0.35, 0.1, 0.035),
+                0.35, 0.1, 0.035, R.string.open_mouth),
         KISS(() -> VisionMaster.getInstance().currentFace.getMouth().getKissScore(),
-                100, 40, 0.035);
+                100, 40, 0.035, R.string.kiss);
 
         private final Supplier<Double> valSup;
         private double restingMaximumScore, actingMinimumScore, maximumSymmetry;
+        private int prettyName;
 
-        Exercise(Supplier<Double> valueSupplier, double actingMin, double restingMax, double maxSym) {
+        Exercise(Supplier<Double> valueSupplier, double actingMin, double restingMax, double maxSym,
+                 int name) {
             this.valSup = valueSupplier;
             setActingMinimumScore(actingMin);
             setRestingMaximumScore(restingMax);
             setMaximumSymmetry(maxSym);
+            prettyName = name;
+        }
+
+        public String get_name() {
+            return VisionMaster.getInstance().context.getResources().getString(prettyName);
         }
 
         public double getActualActingMin() {
@@ -209,6 +217,9 @@ public class VisionMaster extends Thread {
 
     public void setCurrentExr(Exercise currentExr) {
         this.currentExr = currentExr;
+    }
+    public Exercise getCurrentExr() {
+        return this.currentExr;
     }
 
     /**

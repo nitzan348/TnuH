@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">תנו חיוך 0.3</string>
+    <string name="app_name">תנו חיוך 1.0</string>
     <string name="difficulty">רמת קושי</string>
     <string name="kiss">נשיקה</string>
     <string name="cheek_blow">ניפוח לחיים</string>
@@ -12,4 +12,6 @@
     <string name="settings">הגדרות</string>
     <string name="save">שמור</string>
     <string name="relax_command">תרפו...</string>
+    <string name="good_job">עבודה טובה!</string>
+    <string name="back">חזרה</string>
 </resources>

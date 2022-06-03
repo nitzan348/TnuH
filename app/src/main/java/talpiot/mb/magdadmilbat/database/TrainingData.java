@@ -9,14 +9,14 @@ public class TrainingData {
     private String date;
     private String time; // Training start time
     private String exerciseDescription;
-    private String duration; // duration that the Training take
+    private String difficulty; // duration that the Training take
     private int repetition; // number of times the user repeat exercise
 
-    public TrainingData(String date, String time, String exerciseDescription, String duration, int repetition) {
+    public TrainingData(String date, String exerciseDescription, String difficulty, int repetition) {
         this.date = date;
-        this.time = time;
+        this.time = "";
         this.exerciseDescription = exerciseDescription;
-        this.duration = duration;
+        this.difficulty = difficulty;
         this.repetition = repetition;
     }
 
@@ -32,8 +32,8 @@ public class TrainingData {
         return time;
     }
 
-    public String getDuration() {
-        return this.duration;
+    public String getDifficulty() {
+        return this.difficulty;
     }
 
     public void setTime(String time) {
@@ -48,8 +48,8 @@ public class TrainingData {
         this.exerciseDescription = exerciseDescription;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 
     public int getRepetition() {
@@ -66,7 +66,7 @@ public class TrainingData {
                 "Date='" + date + '\'' +
                 ", Time='" + time + '\'' +
                 ", Exercise Description: '" + exerciseDescription + '\'' +
-                ", duration:" + duration +
+                ", difficulty:" + difficulty +
                 '}';
     }
 }
