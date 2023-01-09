@@ -17,7 +17,7 @@ public class SettingsChoiceScreen extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exr_choice_screen);
+        setContentView(R.layout.activity_settings_choice_screen);
 
         btnBack = (Button)findViewById(R.id.btnBack);
         btnSmile = (Button)findViewById(R.id.btnSmile);

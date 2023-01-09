@@ -6,6 +6,7 @@
     <string name="cheek_blow">дутье щек</string>
     <string name="smile">улыбка</string>
     <string name="open_mouth">открыть рот</string>
+    <string name="stick_out_tongue">высунуть язык</string>
     <string name="symmery_level">уровень симметрии</string>
     <string name="start_exr">начать упражнение</string>
     <string name="history">история</string>
@@ -14,4 +15,16 @@
     <string name="relax_command">расслабляйтесь...</string>
     <string name="good_job">молодцы!</string>
     <string name="back">назад</string>
+    <string name="easy_scale">легкий</string>
+    <string name="hard_scale">жесткий</string>
+
+    //calibration
+    <string name="calibration_kiss">Калибровка поцелуя</string>
+    <string name="calibration_cheek_blow">Калибровка надувания щек</string>
+    <string name="calibration_smile">Калибровка улыбки</string>
+    <string name="calibration_open_mouth">Калибровка открытия рта</string>
+    <string name="calibration_stick_out_tongue">Калибровка вытаскивания языка</string>
+    <string name="calibration_relaxation">калибровка релаксации</string>
+    <string name="calibration">Калибровка</string>
+
 </resources>
