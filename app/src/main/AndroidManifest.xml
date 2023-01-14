@@ -20,6 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MagdadMilbat">
         <activity
+            android:name="talpiot.mb.magdadmilbat.ExrCalibChoiceScreen"
+            android:exported="false"/>
+        <activity
+            android:name="talpiot.mb.magdadmilbat.calibPage"
+            android:exported="false"/>
+        <activity
+            android:name="talpiot.mb.magdadmilbat.calibRelaxPage"
+            android:exported="false"/>
+        <activity
             android:name="talpiot.mb.magdadmilbat.ExercisePage"
             android:exported="true"/>
         <activity
@@ -37,6 +46,7 @@
         <activity
             android:name="talpiot.mb.magdadmilbat.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

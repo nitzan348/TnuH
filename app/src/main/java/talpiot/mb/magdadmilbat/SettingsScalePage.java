@@ -1,6 +1,7 @@
 // comment
 package talpiot.mb.magdadmilbat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -21,7 +22,7 @@ public class SettingsScalePage extends AppCompatActivity implements SeekBar.OnSe
     Button btnBack, btnSave;
     SeekBar sbDiffLevel, sbSymmLevel;
     TextView tvExercise;
-    SharedPreferences sp;
+    SharedPreferences sp, spGet;
     int level, repetition;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -90,6 +91,18 @@ public class SettingsScalePage extends AppCompatActivity implements SeekBar.OnSe
 
     public void saveSP(SharedPreferences sp)
     {
+        //spGet = getSharedPreferences(getIntent().getStringExtra("exercise sp"), 0);
+        /**
+        double [] diff_arr = new double[4];
+        double [] symm_arr = new double[4];
+        SharedPreferences spGet = getSharedPreferences("calibInfo", MODE_PRIVATE);
+        //spGet = this.getSharedPreferences("calibInfo", Context.MODE_PRIVATE);
+        for(int i=0; i<4; i++){
+            diff_arr[i] = (shared.getdouble("calibInfo","diff" + i));
+            diff_arr[i] = (shared.getdouble("calibInfo","sym_diff" + i));
+        }
+        String channel = (shared.getString(keyChannel, ""));
+        */
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("diff", String.valueOf(level));
         editor.putString("sym_diff", String.valueOf(repetition));

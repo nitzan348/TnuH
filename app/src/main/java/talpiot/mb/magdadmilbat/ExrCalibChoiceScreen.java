@@ -82,7 +82,7 @@ public class ExrCalibChoiceScreen extends AppCompatActivity implements View.OnCl
         }
         else if (view == btnRelaxationCalibration)
         {
-            Intent intent = new Intent(this, calibRelaxPage.class);
+            Intent intent = new Intent(this, calibPage.class);
             //intent.putExtra("exercise", "כיול הרפיה");
             //intent.putExtra("exercise sp", "relaxation calibration");
             //   VisionMaster.getInstance().setCurrentExr(VisionMaster.CHEEKS);
