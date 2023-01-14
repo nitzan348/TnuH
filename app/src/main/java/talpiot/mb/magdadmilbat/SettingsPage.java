@@ -1,3 +1,4 @@
+// comment
 package talpiot.mb.magdadmilbat;
 
 import android.content.Intent;
