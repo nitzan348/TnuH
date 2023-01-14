@@ -55,6 +55,7 @@ public class VisionMaster extends Thread {
 
     private DecomposedFace currentFace;
     private Exercise currentExr;
+    private Calib currentCalib;
 
     /**
      * flags to define current face state during practice.
@@ -62,6 +63,92 @@ public class VisionMaster extends Thread {
      */
     private boolean restingFace = false;
 
+    public enum Calib {
+
+        SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(),
+                0.42, 0.315, 0.035,
+                R.string.smile),
+        BIG_MOUTH(() -> VisionMaster.getInstance().currentFace.getMouth().getBigMouthScore(),
+                0.35, 0.1, 0.035, R.string.open_mouth),
+        KISS(() -> VisionMaster.getInstance().currentFace.getMouth().getKissScore(),
+                100, 40, 0.035, R.string.kiss);
+
+        private final Supplier<Double> valSup;
+        private double restingMaximumScore, actingMinimumScore, maximumSymmetry;
+        private int prettyName;
+
+        Calib(Supplier<Double> valueSupplier, double actingMin, double restingMax, double maxSym,
+              int name) {
+            this.valSup = valueSupplier;
+            setActingMinimumScore(actingMin);
+            setRestingMaximumScore(restingMax);
+            setMaximumSymmetry(maxSym);
+            prettyName = name;
+        }
+
+        public String get_name() {
+            return VisionMaster.getInstance().context.getResources().getString(prettyName);
+        }
+
+        public double getActualActingMin() {
+
+            double difficulty =
+                    Integer.parseInt(VisionMaster.getInstance().context
+                            .getSharedPreferences(name(), 0)
+                            .getString("diff", "1")) / 100.0;
+
+            double min = restingMaximumScore + (actingMinimumScore - restingMaximumScore) * 0.1; // Arbitrary 10%
+
+            Log.i(VisionMaster.TAG, "min diff = " + min + " ret diff = "
+                    + (min + difficulty * ((actingMinimumScore - min) / 0.8)));
+
+            return min + difficulty * ((actingMinimumScore - min) / 0.8); // 0.8 to have regular human values at 80%
+        }
+
+        public double getActualRestingMax() {
+            return restingMaximumScore;
+        }
+
+        public double getActualMaxSym() {
+            double difficulty =
+                    Integer.parseInt(
+                            VisionMaster.getInstance().context
+                                    .getSharedPreferences(name(), 0)
+                                    .getString("sym_diff", "1")) / 100.0;
+
+            double max = maximumSymmetry * 5; // Arbitrary 500%
+
+            return max - difficulty * (max - 0.8 * maximumSymmetry); // Again arbitrary
+        }
+
+        public double getMaximumSymmetry() {
+            return maximumSymmetry;
+        }
+
+        public void setMaximumSymmetry(double maximumSymmetry) {
+            this.maximumSymmetry = maximumSymmetry;
+        }
+
+        public double get() {
+            return valSup.get();
+        }
+
+        public double getRestingMaximumScore() {
+            return restingMaximumScore;
+        }
+
+        public void setRestingMaximumScore(double restingMaximumScore) {
+            this.restingMaximumScore = restingMaximumScore;
+        }
+
+        public double getActingMinimumScore() {
+            return actingMinimumScore;
+        }
+
+        public void setActingMinimumScore(double actingMinimumScore) {
+            this.actingMinimumScore = actingMinimumScore;
+        }
+    }
     public enum Exercise {
 
         SMILE(() -> VisionMaster.getInstance().currentFace.getMouth().getSmileScore(),
@@ -160,7 +247,6 @@ public class VisionMaster extends Thread {
     }
 
     public DecomposedFace getCurrentFace() {
-
         return currentFace;
     }
 
@@ -281,5 +367,44 @@ public class VisionMaster extends Thread {
                     }
                 });
     }
-
+    public static double []  recSyms(IMouth [] ar,String motion) {
+        double [] recSyms = new double [numberLevels];
+        double average;
+        int sum=0;
+        for (int i=0;i<ar.length;i++){
+            sum+=ar[i].getSymmetryCoef();
+        }
+        average=sum/ar.length;
+        recSyms[3]=average;
+        recSyms[0]=average-3*diff_syms;
+        recSyms[1]=average-2*diff_syms;
+        recSyms[2]=average-diff_syms;
+        recSyms[4]=average+diff_syms;
+        recSyms[5]=average+diff_syms;
+        return recSyms;
+    }
+    public static double [] recPows(IMouth [] ar,String motion) {
+        double [] recPows = new double [numberLevels];
+        double average;
+        int sum=0;
+        for (int i=0;i<ar.length;i++){
+            if(motion=="smile"){
+                sum+=ar[i].getSmileScore();
+            }
+            if(motion=="kiss"){
+                sum+=ar[i].getKissScore();
+            }
+            if(motion=="open"){
+                sum+=ar[i].getBigMouthScore();
+            }
+        }
+        average=sum/ar.length;
+        recPows[0]=average-diff_pows;
+        recPows[1]=average;
+        recPows[2]=average+diff_pows;
+        return recPows;
+    }
+    static final int numberLevels = 3;
+    static final int diff_syms=10;
+    static final int diff_pows=10;
 }

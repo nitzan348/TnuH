@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_gravity="left"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_baseline_keyboard_backspace_24"
+        android:id="@+id/btnBack"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:textSize="40sp"
+        android:id="@+id/tvExercise"
+        />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="50dp"
+    android:textSize="25sp"
+    android:text = "@string/difficulty"
+    android:id="@+id/tvLevel"
+    />
+
+    <SeekBar
+        android:id="@+id/sbDiffLevel"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:min="0"
+        android:max="2"
+        android:progress="0"
+        />
+
+    <TextView
+        android:id="@+id/tvHardDiff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="105dp"
+        android:text="@string/hard_scale"
+        />
+
+    <TextView
+        android:id="@+id/tvEasyDiff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="-20dp"
+        android:text="@string/easy_scale"
+        />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="15dp"
+    android:textSize="25sp"
+    android:text = "@string/symmery_level"
+    android:id="@+id/tvRepetition"
+    />
+
+<SeekBar
+    style="@style/Widget.AppCompat.SeekBar.Discrete"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:min="0"
+    android:max="2"
+    android:progress="0"
+    android:id="@+id/sbSymmLevel"
+    />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="left"
+    android:layout_marginLeft="105dp"
+    android:text="@string/easy_scale"
+    android:id="@+id/tvEasySymm"
+    />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right"
+    android:layout_marginRight="105dp"
+    android:layout_marginTop="-19dp"
+    android:text="@string/hard_scale"
+    android:id="@+id/tvHardSymm"
+    />
+
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="50dp"
+    android:text="@string/save"
+    android:id="@+id/btnSave"
+    />
+
+</LinearLayout>
