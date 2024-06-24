@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_gravity="left"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/ic_baseline_keyboard_backspace_24"
+        tools:ignore="SpeakableTextPresentCheck"
+        />
+
+    <Button
+        android:id="@+id/btnSmile"
+        android:layout_width="350dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="@string/smile"
+        android:textSize="30sp"
+        />
+
+    <Button
+        android:id="@+id/btnOpenMouth"
+        android:layout_width="350dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="@string/open_mouth"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnKiss"
+        android:layout_width="350dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="@string/kiss"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnCheeks"
+        android:layout_width="350dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="@string/cheek_blow"
+        android:visibility="gone"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnToung"
+        android:layout_width="350dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="@string/stick_out_tongue"
+        android:visibility="gone"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/btnCalib"
+        android:layout_width="350dp"
+        android:layout_height="85dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="@string/calibration"
+        android:textSize="30sp" />
+
+</LinearLayout>

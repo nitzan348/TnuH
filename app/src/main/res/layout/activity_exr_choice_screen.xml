@@ -55,4 +55,15 @@
         android:text="@string/cheek_blow"
         />
 
+    <Button
+        android:id="@+id/btnToung"
+        android:layout_width="350dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textSize="30dp"
+        android:visibility="gone"
+        android:text="@string/stick_out_tongue"
+        />
+
 </LinearLayout>

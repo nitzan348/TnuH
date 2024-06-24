@@ -1,5 +1,7 @@
+// comment
 package talpiot.mb.magdadmilbat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -16,19 +18,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.MagdadMilbat.R;
 
-public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
+public class SettingsScalePage extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
     Button btnBack, btnSave;
-    SeekBar sbDiff, sbSymmDiff;
-    TextView tvExercise, tvLevelNumber, tvRepetitionNumber;
-    EditText etDuration;
-    SharedPreferences sp;
+    SeekBar sbDiffLevel, sbSymmLevel;
+    TextView tvExercise;
+    SharedPreferences sp, spGet;
     int level, repetition;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_difficulty_levels_settings);
 
         tvExercise = (TextView) findViewById(R.id.tvExercise);
         tvExercise.setText(getIntent().getStringExtra("exercise"));
@@ -36,21 +37,18 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
         btnBack = (Button)findViewById(R.id.btnBack);
         btnSave = (Button)findViewById(R.id.btnSave);
 
-        sbDiff = (SeekBar)findViewById(R.id.sbLevel);
-        sbSymmDiff = (SeekBar)findViewById(R.id.sbSymmDiff);
-        tvLevelNumber = (TextView)findViewById(R.id.tvLevelNumber);
-        tvRepetitionNumber = (TextView)findViewById(R.id.tvRepetitionNumber);
-        etDuration = (EditText)findViewById(R.id.etDuration);
+        sbDiffLevel = (SeekBar)findViewById(R.id.sbDiffLevel);
+        sbSymmLevel = (SeekBar)findViewById(R.id.sbSymmLevel);
 
         btnBack.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
-        sbDiff.setOnSeekBarChangeListener(this);
-        sbSymmDiff.setOnSeekBarChangeListener(this);
-        sbDiff.setMin(1);
-        sbSymmDiff.setMin(1);
-        sbDiff.setMax(100);
-        sbSymmDiff.setMax(100);
+        sbDiffLevel.setOnSeekBarChangeListener(this);
+        sbSymmLevel.setOnSeekBarChangeListener(this);
+        sbDiffLevel.setMin(0);
+        sbSymmLevel.setMin(0);
+        sbDiffLevel.setMax(2);
+        sbSymmLevel.setMax(2);
 
         sp = getSharedPreferences(getIntent().getStringExtra("exercise sp"), 0);
         loadSP(sp);
@@ -65,39 +63,49 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
             startActivity(intent);
         }
         else if (view == btnSave)
-        {            saveSP(sp);
+        {
+            saveSP(sp);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
     }
 
     @Override
+
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        if (seekBar == sbDiff)
+        if (seekBar == sbDiffLevel)
         {
-            tvLevelNumber.setText(String.valueOf(i));
             level = i;
         }
-        else if (seekBar == sbSymmDiff)
+        else if (seekBar == sbSymmLevel)
         {
-            tvRepetitionNumber.setText(String.valueOf(i));
             repetition = i;
         }
     }
 
     public void loadSP(SharedPreferences sp)
     {
-        sbDiff.setProgress(Integer.parseInt(sp.getString("diff", "1")));
-        sbSymmDiff.setProgress(Integer.parseInt(sp.getString("sym_diff", "1")));
-        etDuration.setText(sp.getString("duration", null));
+        sbDiffLevel.setProgress(Integer.parseInt(sp.getString("diff", "0")));
+        sbSymmLevel.setProgress(Integer.parseInt(sp.getString("sym_diff", "0")));
     }
 
     public void saveSP(SharedPreferences sp)
     {
+        //spGet = getSharedPreferences(getIntent().getStringExtra("exercise sp"), 0);
+        /**
+        double [] diff_arr = new double[4];
+        double [] symm_arr = new double[4];
+        SharedPreferences spGet = getSharedPreferences("calibInfo", MODE_PRIVATE);
+        //spGet = this.getSharedPreferences("calibInfo", Context.MODE_PRIVATE);
+        for(int i=0; i<4; i++){
+            diff_arr[i] = (shared.getdouble("calibInfo","diff" + i));
+            diff_arr[i] = (shared.getdouble("calibInfo","sym_diff" + i));
+        }
+        String channel = (shared.getString(keyChannel, ""));
+        */
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("diff", String.valueOf(level));
         editor.putString("sym_diff", String.valueOf(repetition));
-        editor.putString("duration", etDuration.getText().toString());
         editor.apply();
         Toast.makeText(this, "ההגדרות נשמרו", Toast.LENGTH_SHORT).show();
     }
@@ -112,3 +120,5 @@ public class SettingsPage extends AppCompatActivity implements SeekBar.OnSeekBar
 
     }
 }
+
+

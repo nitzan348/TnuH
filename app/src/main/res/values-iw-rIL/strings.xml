@@ -6,6 +6,7 @@
     <string name="cheek_blow">ניפוח לחיים</string>
     <string name="smile">חיוך</string>
     <string name="open_mouth">פתיחת פה</string>
+    <string name="stick_out_tongue">הוצאת לשון</string>
     <string name="symmery_level">רמת סימטריה</string>
     <string name="start_exr">התחל תרגיל</string>
     <string name="history">היסטוריה</string>
@@ -14,4 +15,16 @@
     <string name="relax_command">תרפו...</string>
     <string name="good_job">עבודה טובה!</string>
     <string name="back">חזרה</string>
+    <string name="easy_scale">קל</string>
+    <string name="hard_scale">קשה</string>
+
+    //calibration
+    <string name="calibration_kiss">כיול נשיקה</string>
+    <string name="calibration_cheek_blow">כיול ניפוח לחיים</string>
+    <string name="calibration_smile">כיול חיוך</string>
+    <string name="calibration_open_mouth">כיול פתיחת פה</string>
+    <string name="calibration_stick_out_tongue">כיול הוצאת לשון</string>
+    <string name="calibration_relaxation">כיול הרפיה</string>
+    <string name="calibration">כיול</string>
+
 </resources>
